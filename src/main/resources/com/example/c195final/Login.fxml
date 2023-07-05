@@ -2,13 +2,19 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.c195final.controller.LoginController">
    <children>
       <Label text="Login Page" />
-      <PasswordField layoutX="226.0" layoutY="240.0" promptText="Please Enter Password" />
-      <TextField layoutX="226.0" layoutY="175.0" promptText="Please Enter User Name" />
-      <Button layoutX="277.0" layoutY="315.0" mnemonicParsing="false" text="Login" />
-      <Button layoutX="551.0" layoutY="17.0" mnemonicParsing="false" text="Exit" />
+      <PasswordField fx:id="passwordField" layoutX="226.0" layoutY="240.0" promptText="Please Enter Password" />
+      <TextField fx:id="usernameField" layoutX="226.0" layoutY="175.0" promptText="Please Enter User Name" />
+      <Button fx:id="loginButton" layoutX="277.0" layoutY="315.0" mnemonicParsing="false" onAction="#loginButtonAction" text="Login" />
+      <Label fx:id="location" alignment="CENTER" contentDisplay="CENTER" layoutX="191.0" layoutY="100.0" prefHeight="36.0" prefWidth="219.0" text="Locale">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="errorLabel" layoutX="118.0" layoutY="370.0" prefHeight="25.0" prefWidth="399.0" />
    </children>
 </AnchorPane>

@@ -19,6 +19,6 @@ module com.example.c195final {
     //opens com.example.c195final.model to javafx.fxml;
     //exports com.example.c195final.model;
 
-    //opens com.example.c195final.dao to javafx.fxml;
-    //exports com.example.c195final.dao;
+    opens com.example.c195final.dao to javafx.fxml;
+    exports com.example.c195final.dao;
 }

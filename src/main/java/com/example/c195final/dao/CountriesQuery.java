@@ -1,4 +1,6 @@
-package com.example.c195final.helper;
+package com.example.c195final.dao;
+
+import com.example.c195final.helper.JDBC;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

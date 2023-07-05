@@ -1,6 +1,5 @@
 package com.example.c195final;
 
-import com.example.c195final.helper.CountriesQuery;
 import com.example.c195final.helper.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +9,8 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Main extends Application {
     @Override
@@ -22,9 +23,9 @@ public class Main extends Application {
         stage.show();
     }
 
-
     public static void main(String[] args) throws SQLException {
 
+        //Locale.setDefault(new Locale("fr","FR"));
         JDBC.openConnection();
 
         launch(args);
