@@ -3,6 +3,7 @@ package com.example.c195final.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -10,72 +11,65 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.ZoneId;
-import java.util.Locale;
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class MainScreenController {
-
+/**
+ * @author lukea
+ * */
+public class MainScreenController implements Initializable {
+    /**
+     * This method handles user input to load the appointment screen.
+     * @param event takes user input in the form of a mouse click
+     * @throws IOException handles errors
+     * */
     @FXML
-    public void loginButtonAction(ActionEvent event) throws IOException {
-        // Store username and password into variables
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+    public void mainMenuAppointmentAction(ActionEvent event) throws IOException {
 
-        LoginController userAuthentication = new LoginController();
-        if (userAuthentication.isValidCredentials(username, password)) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
-            Parent parent = loader.load();
-            Scene scene = new Scene(parent);
-            MainScreenController controller = loader.getController();
-            // controller.sendProduct(productTableView.getSelectionModel().getSelectedIndex(),productTableView.getSelectionModel().getSelectedItem());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } else {
-            errorLabel.setText("Invalid username or password");
-        }
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/c195final/AppointmentView.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        AppointmentViewController controller = loader.getController();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
     }
-
+    /**
+     * This method handles user input to load the customer screen.
+     * @param event takes user input in the form of a mouse click
+     * @throws IOException handles errors
+     * */
     @FXML
-    public void loginButtonAction(ActionEvent event) throws IOException {
-        // Store username and password into variables
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+    public void mainMenuCustomerAction(ActionEvent event) throws IOException {
 
-        LoginController userAuthentication = new LoginController();
-        if (userAuthentication.isValidCredentials(username, password)) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
-            Parent parent = loader.load();
-            Scene scene = new Scene(parent);
-            MainScreenController controller = loader.getController();
-            // controller.sendProduct(productTableView.getSelectionModel().getSelectedIndex(),productTableView.getSelectionModel().getSelectedItem());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } else {
-            errorLabel.setText("Invalid username or password");
-        }
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/c195final/Customer.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        //CustomerController controller = loader.getController();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
     }
-
+    /**
+     * This method handles user input to load the report screen.
+     * @param event takes user input in the form of a mouse click
+     * @throws IOException handles errors
+     * */
     @FXML
-    public void loginButtonAction(ActionEvent event) throws IOException {
+    public void mainMenuReportAction(ActionEvent event) throws IOException {
 
-        if (userAuthentication.isValidCredentials(username, password)) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
-            Parent parent = loader.load();
-            Scene scene = new Scene(parent);
-            MainScreenController controller = loader.getController();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } else {
-            errorLabel.setText("Invalid username or password");
-        }
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/c195final/Reports.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        ReportsController controller = loader.getController();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+
     }
 
     public void initialize(URL url, ResourceBundle resourceBundle) {

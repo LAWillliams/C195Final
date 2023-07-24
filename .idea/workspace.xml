@@ -4,30 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="First Commit">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/dao/UserQuery.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Appointment.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Contact.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Country.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Nat.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Nat_en_US.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Nat_fr_FR.properties" afterDir="false" />
+    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Second Commit&#10;&#10;Completed login functionality">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerCreateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerCreateController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/MainScreenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/MainScreenController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/helper/CountriesQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/dao/CountriesQuery.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Login.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Login.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/ReportsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/ReportsController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/helper/JDBC.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/helper/JDBC.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Customer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Customer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/CustomerCreate.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/CustomerCreate.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/MainScreen.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/MainScreen.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Reports.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Reports.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CoverageOptionsProvider">
+    <option name="myAddOrReplace" value="0" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -82,7 +81,20 @@
       <recent name="com.example.c195final" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.c195final">
+    <configuration name="CustomerController" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.example.c195final.controller.CustomerController" />
+      <module name="C195Final" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.c195final.controller.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="c195final" type="Application" factoryName="Application">
       <option name="MAIN_CLASS_NAME" value="com.example.c195final.Main" />
       <module name="C195Final" />
@@ -90,6 +102,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.CustomerController" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -107,14 +124,26 @@
       <option name="project" value="LOCAL" />
       <updated>1687728706922</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Second Commit&#10;&#10;Completed login functionality">
+      <created>1688525870948</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1688525870948</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="First Commit" />
+    <MESSAGE value="Second Commit&#10;&#10;Completed login functionality" />
+    <option name="LAST_COMMIT_MESSAGE" value="Second Commit&#10;&#10;Completed login functionality" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/C195Final$CustomerController.ic" NAME="CustomerController Coverage Results" MODIFIED="1688875058746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>com.example.c195final.controller.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/C195Final$c195final.ic" NAME="c195final Coverage Results" MODIFIED="1688873364214" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
     <SUITE FILE_PATH="coverage/C195Final$Main.ic" NAME="Main Coverage Results" MODIFIED="1687726841642" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>com.example.c195final.*</FILTER>
     </SUITE>

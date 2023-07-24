@@ -1,5 +1,6 @@
 package com.example.c195final;
 
+import com.example.c195final.controller.CustomerController;
 import com.example.c195final.helper.JDBC;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,8 +16,7 @@ import java.util.ResourceBundle;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        //FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("com/example/c195final/Login.fxml"));
-        //Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+
         Parent root=FXMLLoader.load(getClass().getResource("/com/example/c195final/Login.fxml"));
         stage.setTitle("Login");
         stage.setScene(new Scene(root));
@@ -25,8 +25,9 @@ public class Main extends Application {
 
     public static void main(String[] args) throws SQLException {
 
-        //Locale.setDefault(new Locale("fr","FR"));
         JDBC.openConnection();
+
+        //JDBC.getConnection();
 
         launch(args);
 

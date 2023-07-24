@@ -9,19 +9,18 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
-
-import java.io.FileWriter;
+import javafx.stage.Stage;;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.*;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * @author lukea
+ * */
 public class LoginController implements Initializable {
     @FXML public Button loginButton;
     @FXML public TextField usernameField;
@@ -29,8 +28,15 @@ public class LoginController implements Initializable {
     @FXML public Label location;
     @FXML public Label errorLabel;
     ResourceBundle rb = ResourceBundle.getBundle("/com/example/c195final/Nat", Locale.getDefault());
-
+    /**
+     * This method queries the database for a username and password
+     * */
     public static final String LOGIN_QUERY = "SELECT * FROM users WHERE User_Name = ? AND Password = ?";
+    /**
+     * This method uses the Login_query method to grab a username and password. Then stores them into a statement that eventually returns them as strings.
+     * @param username takes a username as text input
+     * @param password takes a password as text input
+     * */
     public boolean isValidCredentials(String username, String password) {
         try (Connection connection = JDBC.getConnection();
              PreparedStatement statement = connection.prepareStatement(LOGIN_QUERY)) {
@@ -43,6 +49,11 @@ public class LoginController implements Initializable {
         }
         return false;
     }
+    /**
+     * This method handles the login button action event. When a user clicks on the button it checks the username and password, if valid it will bring them to the main screen
+     * @param event handles user input from mouse click
+     * @throws IOException error handling
+     * */
     @FXML
     public void loginButtonAction(ActionEvent event) throws IOException {
         // Store username and password into variables

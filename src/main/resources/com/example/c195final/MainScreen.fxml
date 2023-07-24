@@ -3,12 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.c195final.controller.MainScreenController">
    <children>
-      <Button fx:id="mainMenuAppointmentButton" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Appointments" />
-      <Button fx:id="mainMenuReportButton" layoutX="466.0" layoutY="200.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Reports" />
-      <Button fx:id="mainMenuCustomerButton" layoutX="240.0" layoutY="200.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="120.0" text="Customers" />
+      <Button fx:id="mainMenuAppointmentButton" layoutX="14.0" layoutY="200.0" mnemonicParsing="false" onAction="#mainMenuAppointmentAction" prefHeight="45.0" prefWidth="120.0" text="Appointments" />
+      <Button fx:id="mainMenuReportButton" layoutX="466.0" layoutY="200.0" mnemonicParsing="false" onAction="#mainMenuReportAction" prefHeight="45.0" prefWidth="120.0" text="Reports" />
+      <Button fx:id="mainMenuCustomerButton" layoutX="240.0" layoutY="200.0" mnemonicParsing="false" onAction="#mainMenuCustomerAction" prefHeight="45.0" prefWidth="120.0" text="Customers" />
       <Label layoutX="226.0" layoutY="118.0" text="Welcome to the main menu" />
    </children>
 </AnchorPane>
