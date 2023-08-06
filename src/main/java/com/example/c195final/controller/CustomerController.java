@@ -1,6 +1,7 @@
 package com.example.c195final.controller;
 
 import com.example.c195final.helper.JDBC;
+import com.example.c195final.model.Customer;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -34,6 +35,8 @@ public class CustomerController implements Initializable {
     public TableView tableview;
     @FXML
     public TextField customerDeleteField;
+    @FXML
+    public TextField customerUpdateField;
 
     /**
      * Takes the user back to the main screen
@@ -71,17 +74,68 @@ public class CustomerController implements Initializable {
         tableview.refresh();
     }
 
-    public void customerUpdateAction(ActionEvent event) throws IOException {
+    public static Customer getCustomerByID(int customerID) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerID);
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/c195final/CustomerCreate.fxml"));
-        Parent parent = loader.load();
-        Scene scene = new Scene(parent);
-        CustomerCreateController controller = loader.getController();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stage.setScene(scene);
-        stage.show();
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            int customerId = rs.getInt("Customer_ID");
+            String name = rs.getString("Customer_Name");
+            String address = rs.getString("Address");
+            String createDate = rs.getString("Create_Date");
+            String createdBy = rs.getString("Created_By");
+            String lastUpdate = rs.getString("Last_Update");
+            String lastUpdatedBy = rs.getString("Last_Updated_By");
+            String postalCode = rs.getString("Postal_Code");
+            String phone = rs.getString("Phone");
+            int divisionId = rs.getInt("Division_ID");
+
+            // Create a new Customer object with the retrieved data
+            Customer customer = new Customer(customerId, name, address, postalCode, phone, createDate, createdBy, lastUpdate, lastUpdatedBy, divisionId);
+            return customer;
+        }
+
+        // If no customer record was found with the given ID, return null
+        return null;
     }
+
+    public void customerUpdateAction(ActionEvent event) throws IOException, SQLException {
+        String customerID = customerUpdateField.getText().trim(); // Trim to remove leading/trailing spaces
+
+        // Check if the customerID is not empty or null
+        if (!customerID.isEmpty()) {
+            int customerIdInt = Integer.parseInt(customerID);
+
+            // Retrieve the customer record using the provided customerID
+            Customer customer = getCustomerByID(customerIdInt);
+
+            if (customer != null) {
+                // Load the new FXML screen
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(getClass().getResource("/com/example/c195final/UpdateCustomer.fxml"));
+                Parent parent = loader.load();
+                Scene scene = new Scene(parent);
+
+                // Pass the retrieved customer information to the controller of the new FXML screen
+                UpdateCustomerController controller = loader.getController();
+                controller.setCustomer(customer); // Assuming you have a setter in UpdateCustomerController
+
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                // Handle the case when no customer record is found with the provided ID
+                // Display an error message or take appropriate action
+            }
+        } else {
+            // Handle the case when the customerID field is empty or null
+            // Display an error message or take appropriate action
+        }
+    }
+
 
     public void customerAddAction(ActionEvent event) throws IOException {
 
@@ -95,7 +149,7 @@ public class CustomerController implements Initializable {
         stage.show();
     }
 
-    public static final String Customer_Query = "SELECT customers.Customer_Name,customers.Address,customers.Postal_Code,customers.Phone,customers.Division_ID, first_level_divisions.Division, countries.Country from customers LEFT JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID LEFT JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID";
+    public static final String Customer_Query = "SELECT customers.Customer_ID,customers.Customer_Name,customers.Address,customers.Postal_Code,customers.Phone,customers.Division_ID, first_level_divisions.Division, countries.Country from customers LEFT JOIN first_level_divisions ON customers.Division_ID = first_level_divisions.Division_ID LEFT JOIN countries ON first_level_divisions.Country_ID = countries.Country_ID";
 
     /**
      * This method queries the database using a predefined query, which is stored into a variable. After selecting the data from the query it stores it in a local variable named data. Then it builds the columns and rows and puts the data into the table view
