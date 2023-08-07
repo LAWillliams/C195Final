@@ -9,9 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.PreparedStatement;
@@ -52,6 +53,23 @@ public class UpdateCustomerController implements Initializable {
         stage.show();
     }
 
+    private void showSuccessAlert() {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Success");
+        alert.setHeaderText("Customer saved successfully.");
+        alert.setContentText("The customer data has been saved successfully.");
+        alert.showAndWait();
+    }
+
+    private void showErrorAlert(String errorMessage) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText("Error occurred while saving customer.");
+        alert.setContentText(errorMessage);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE); // Set minimum height to display full error message
+        alert.showAndWait();
+    }
+
     public void setCustomer(Customer customer) {
         Customer_ID.setText(String.valueOf(customer.getCustomer_ID()));
         Customer_Name.setText(customer.getCustomer_Name());
@@ -68,20 +86,29 @@ public class UpdateCustomerController implements Initializable {
         // Set other relevant fields in the controller based on the Customer object
     }
 
-    public int updateCustomerSaveAction(ActionEvent event) throws SQLException {
+    public int updateCustomerSaveAction(ActionEvent event) throws SQLException, IOException {
 
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Create_Date = ?, Created_By = ?, Last_Update = ?, Last_Updated_By = ?, Division_ID = ? WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setString(1, String.valueOf(Customer_Name));
-        ps.setString(2, String.valueOf(Address));
-        ps.setString(3, String.valueOf(Postal_Code));
-        ps.setString(4, String.valueOf(Phone));
-        ps.setString(5, String.valueOf(Create_Date));
-        ps.setString(6, String.valueOf(Created_By));
-        ps.setString(7, String.valueOf(Last_Update));
-        ps.setString(8, String.valueOf(Last_Updated_By));
-        ps.setString(9, String.valueOf(Division_ID));
+        ps.setString(1, Customer_Name.getText());
+        ps.setString(2, Address.getText());
+        ps.setString(3, Postal_Code.getText());
+        ps.setString(4, Phone.getText());
+        ps.setString(5, Create_Date.getText());
+        ps.setString(6, Created_By.getText());
+        ps.setString(7, Last_Update.getText());
+        ps.setString(8, Last_Updated_By.getText());
+        int divisionID = Integer.parseInt(Division_ID.getText());
+        ps.setInt(9,divisionID);
+        int customerID = Integer.parseInt(Customer_ID.getText());
+        ps.setInt(10,customerID);
         int rowsAffected = ps.executeUpdate();
+        if (rowsAffected == 1) {
+            showSuccessAlert();
+            updateCustomerBackButtonAction(event); // Go back to the Customer.fxml screen
+        } else {
+            showErrorAlert("Failed to save customer data.");
+        };
         return rowsAffected;
     }
     @Override

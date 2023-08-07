@@ -7,5 +7,10 @@
    <children>
       <Button mnemonicParsing="false" onAction="#appointmentBackButtonAction" text="Back" />
       <TableView fx:id="tableview" layoutY="115.0" prefHeight="284.0" prefWidth="622.0" />
+      <Button layoutX="55.0" layoutY="25.0" mnemonicParsing="false" onAction="#appointmentDeleteButton" prefHeight="40.0" prefWidth="99.0" text="Delete" />
+      <Button layoutX="258.0" layoutY="25.0" mnemonicParsing="false" onAction="#appointmentAddButton" prefHeight="40.0" prefWidth="99.0" text="Add" />
+      <Button layoutX="509.0" layoutY="25.0" mnemonicParsing="false" onAction="#appointmentUpdateButton" prefHeight="40.0" prefWidth="99.0" text="Update" />
+      <TextField fx:id="appointmentDeleteField" layoutX="55.0" layoutY="65.0" prefHeight="25.0" prefWidth="99.0" promptText="Enter Appt ID" />
+      <TextField fx:id="appointmentUpdateField" layoutX="509.0" layoutY="65.0" prefHeight="25.0" prefWidth="99.0" promptText="Enter Appt ID" />
    </children>
 </AnchorPane>

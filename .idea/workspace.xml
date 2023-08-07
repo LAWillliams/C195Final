@@ -4,13 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Third Commit&#10;&#10;Added delete and add functions for Customer classes, will implement into appointment classes">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateCustomerController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Customer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/UpdateCustomer.fxml" afterDir="false" />
+    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Customer.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Customer.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateCustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,14 +130,22 @@
       <option name="project" value="LOCAL" />
       <updated>1690166796110</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model">
+      <created>1691287052864</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1691287052864</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="First Commit" />
     <MESSAGE value="Second Commit&#10;&#10;Completed login functionality" />
     <MESSAGE value="Third Commit&#10;&#10;Added delete and add functions for Customer classes, will implement into appointment classes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Third Commit&#10;&#10;Added delete and add functions for Customer classes, will implement into appointment classes" />
+    <MESSAGE value="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/C195Final$CustomerController.ic" NAME="CustomerController Coverage Results" MODIFIED="1688875058746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

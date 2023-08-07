@@ -25,6 +25,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.util.Callback;
 import javafx.stage.WindowEvent;
@@ -48,11 +49,23 @@ public class AppointmentViewController implements Initializable {
 
     }
 
+    /**
+     * This defines a method to query the selected row and delete it from the database
+     * */
+    public static int appointmentDelete(int appointmentID) throws SQLException {
+        String sql = "DELETE FROM customers WHERE Appointment_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1,appointmentID);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected;
+    }
+
     public static final String Appointment_Query = "SELECT appointments.Appointment_ID,appointments.Title,appointments.Description,appointments.Location,appointments.Contact_ID,appointments.Type,appointments.Start,appointments.End,appointments.Customer_ID,appointments.User_ID from appointments";
 
     public void buildData() {
         data = FXCollections.observableArrayList();
         try {
+            //opens connection and executes query
             JDBC.openConnection();
             Connection connection = JDBC.getConnection();
             System.out.println(connection.isClosed());;
