@@ -1,14 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.c195final.controller.AppointmentCreateController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.c195final.controller.AppointmentCreateController">
+   <children>
+      <Button layoutY="2.0" mnemonicParsing="false" onAction="#appointmentCreateBackButton" text="Back" />
+      <Label layoutX="15.0" layoutY="55.0" text="Appointment ID" />
+      <Label layoutX="15.0" layoutY="90.0" text="Title" />
+      <Label layoutX="15.0" layoutY="115.0" text="Description" />
+      <Label layoutX="15.0" layoutY="190.0" text="Location" />
+      <Label layoutX="15.0" layoutY="220.0" text="Contact" />
+      <Label layoutX="15.0" layoutY="250.0" text="Type" />
+      <Label layoutX="15.0" layoutY="280.0" text="Start Date and Time" />
+      <Label layoutX="15.0" layoutY="310.0" text="End Date and Time" />
+      <Label layoutX="15.0" layoutY="340.0" text="Customer ID" />
+      <Label layoutX="15.0" layoutY="370.0" text="User ID" />
+      <TextField fx:id="Appointment_ID" layoutX="151.0" layoutY="43.0" promptText="Enter Appointment ID" />
+      <TextField fx:id="Customer_ID" layoutX="151.0" layoutY="336.0" promptText="Enter Customer ID" />
+      <TextField fx:id="User_ID" layoutX="151.0" layoutY="366.0" promptText="Enter User ID" />
+      <TextField fx:id="End" layoutX="151.0" layoutY="306.0" promptText="Enter End Date and Time" />
+      <TextField fx:id="Start" layoutX="151.0" layoutY="276.0" promptText="Enter Start Date and Time" />
+      <TextField fx:id="Type" layoutX="151.0" layoutY="246.0" promptText="Enter Type" />
+      <TextField fx:id="Contact_ID" layoutX="151.0" layoutY="216.0" promptText="Enter Contact" />
+      <TextField fx:id="Location" layoutX="151.0" layoutY="188.0" promptText="Enter Location" />
+      <TextField fx:id="Description" layoutX="151.0" layoutY="111.0" prefHeight="70.0" prefWidth="149.0" promptText="Enter Description" />
+      <TextField fx:id="Title" layoutX="151.0" layoutY="78.0" promptText="Enter Title" />
+      <Button layoutX="470.0" layoutY="15.0" mnemonicParsing="false" onAction="#appointmentSaveAction" prefHeight="70.0" prefWidth="116.0" text="Save" />
+   </children>
 </AnchorPane>

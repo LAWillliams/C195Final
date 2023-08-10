@@ -9,10 +9,8 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,6 +32,13 @@ public class AppointmentViewController implements Initializable {
 
     public ObservableList<ObservableList> data;
     public TableView tableview;
+
+    @FXML
+    public TextField appointmentDeleteField;
+
+    @FXML
+    public TextField appointmentUpdateField;
+
 
     @FXML
     public void appointmentBackButtonAction(ActionEvent event) throws IOException {
@@ -59,6 +64,26 @@ public class AppointmentViewController implements Initializable {
         int rowsAffected = ps.executeUpdate();
         return rowsAffected;
     }
+
+    public void appointmentDeleteButton(ActionEvent event) throws SQLException {
+        String appointmentID = appointmentDeleteField.getText();
+        appointmentDelete(Integer.parseInt(appointmentID));
+        tableview.refresh();
+    }
+
+    public void appointmentAddButton(ActionEvent event) throws IOException {
+
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/com/example/c195final/AppointmentCreate.fxml"));
+        Parent parent = loader.load();
+        Scene scene = new Scene(parent);
+        AppointmentCreateController controller = loader.getController();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void appointmentUpdateButton(ActionEvent event){}
 
     public static final String Appointment_Query = "SELECT appointments.Appointment_ID,appointments.Title,appointments.Description,appointments.Location,appointments.Contact_ID,appointments.Type,appointments.Start,appointments.End,appointments.Customer_ID,appointments.User_ID from appointments";
 
