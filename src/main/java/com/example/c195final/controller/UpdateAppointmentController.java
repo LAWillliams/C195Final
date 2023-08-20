@@ -1,6 +1,7 @@
 package com.example.c195final.controller;
 
 import com.example.c195final.helper.JDBC;
+import com.example.c195final.model.Appointment;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +20,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
-public class AppointmentCreateController implements Initializable {
+public class UpdateAppointmentController implements Initializable {
 
     @FXML
     public TextField Appointment_ID;
@@ -51,8 +52,9 @@ public class AppointmentCreateController implements Initializable {
     @FXML
     public TextField Contact_ID;
 
+
     @FXML
-    public void appointmentCreateBackButton(ActionEvent event) throws IOException {
+    public void appointmentUpdateBackButton(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource("/com/example/c195final/AppointmentView.fxml"));
@@ -68,7 +70,7 @@ public class AppointmentCreateController implements Initializable {
     private void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
-        alert.setHeaderText("Customer saved successfully.");
+        alert.setHeaderText("Appointment saved successfully.");
         alert.setContentText("The appointment data has been saved successfully.");
         alert.showAndWait();
     }
@@ -82,35 +84,51 @@ public class AppointmentCreateController implements Initializable {
         alert.showAndWait();
     }
 
-    public int appointmentSaveAction(ActionEvent event) throws SQLException, IOException {
-        String sql = "INSERT INTO appointments (Appointment_ID,Title,Description,Location,Type,Start,End,Customer_ID,Contact_ID,User_ID)VALUES(?,?,?,?,?,?,?,?,?,?)";
+    public void setAppointment(Appointment appointment) {
+        Appointment_ID.setText(String.valueOf(appointment.getAppointmentId()));
+        Title.setText(appointment.getTitle());
+        Description.setText(appointment.getDescription());
+        Location.setText(appointment.getLocation());
+        Contact_ID.setText(appointment.getContactId());
+        Type.setText(appointment.getType());
+        Start.setText(appointment.getStart().toString()); // Convert LocalDateTime to String
+        End.setText(appointment.getEnd().toString()); // Convert LocalDateTime to String
+        Customer_ID.setText(appointment.getCustomerId());
+        User_ID.setText(String.valueOf(appointment.getUserId()));
+
+        // Set other relevant fields in the controller based on the Appointment object
+    }
+
+
+
+    public int appointmentUpdateSaveAction(ActionEvent event) throws SQLException, IOException {
+        String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, Contact_ID = ?, User_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
-        // Validate and parse integer values
         try {
-            ps.setInt(1, Integer.parseInt(Appointment_ID.getText()));
-            ps.setInt(8, Integer.parseInt(Customer_ID.getText()));
-            ps.setInt(9, Integer.parseInt(Contact_ID.getText()));
-            ps.setInt(10, Integer.parseInt(User_ID.getText()));
+            ps.setInt(10, Integer.parseInt(Appointment_ID.getText()));
+            ps.setInt(7, Integer.parseInt(Customer_ID.getText()));
+            ps.setInt(8, Integer.parseInt(Contact_ID.getText()));
+            ps.setInt(9, Integer.parseInt(User_ID.getText()));
         } catch (NumberFormatException e) {
             showErrorAlert("Invalid integer input. Please provide valid integer values.");
             return 0; // Indicate that the operation failed
         }
 
-        ps.setString(2, Title.getText());
-        ps.setString(3, Description.getText());
-        ps.setString(4, Location.getText());
-        ps.setString(5, Type.getText());
-        ps.setString(6, Start.getText());
-        ps.setString(7, End.getText());
+        ps.setString(1, Title.getText());
+        ps.setString(2, Description.getText());
+        ps.setString(3, Location.getText());
+        ps.setString(4, Type.getText());
+        ps.setString(5, Start.getText());
+        ps.setString(6, End.getText());
 
         int rowsAffected = ps.executeUpdate();
 
         if (rowsAffected == 1) {
             showSuccessAlert();
-            appointmentCreateBackButton(event); // Go back to the Customer.fxml screen
+            appointmentUpdateBackButton(event); // Go back to the Customer.fxml screen
         } else {
-            showErrorAlert("Failed to save customer data.");
+            showErrorAlert("Failed to update appointment data.");
         }
         return rowsAffected;
     }

@@ -4,11 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model">
+    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Fifth Commit&#10;&#10;Worked on update function for customer and created customer model">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateAppointmentController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/UpdateAppointment.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentCreateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentCreateController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentCreate.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentCreate.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateCustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateCustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Appointment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1691287052864</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fifth Commit&#10;&#10;Worked on update function for customer and created customer model">
+      <created>1691706813916</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1691706813916</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -145,7 +157,8 @@
     <MESSAGE value="Second Commit&#10;&#10;Completed login functionality" />
     <MESSAGE value="Third Commit&#10;&#10;Added delete and add functions for Customer classes, will implement into appointment classes" />
     <MESSAGE value="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fourth Commit&#10;&#10;Worked on update function for customer and created customer model" />
+    <MESSAGE value="Fifth Commit&#10;&#10;Worked on update function for customer and created customer model" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fifth Commit&#10;&#10;Worked on update function for customer and created customer model" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/C195Final$CustomerController.ic" NAME="CustomerController Coverage Results" MODIFIED="1688875058746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">

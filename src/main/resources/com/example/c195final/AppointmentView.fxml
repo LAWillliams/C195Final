@@ -12,5 +12,11 @@
       <Button layoutX="509.0" layoutY="25.0" mnemonicParsing="false" onAction="#appointmentUpdateButton" prefHeight="40.0" prefWidth="99.0" text="Update" />
       <TextField fx:id="appointmentDeleteField" layoutX="55.0" layoutY="65.0" prefHeight="25.0" prefWidth="99.0" promptText="Enter Appt ID" />
       <TextField fx:id="appointmentUpdateField" layoutX="509.0" layoutY="65.0" prefHeight="25.0" prefWidth="99.0" promptText="Enter Appt ID" />
+      <RadioButton layoutX="171.0" layoutY="82.0" mnemonicParsing="false" onAction="#sortByMonthRadioButton" text="Sort By Month">
+         <toggleGroup>
+            <ToggleGroup fx:id="sortingToggleGroup" />
+         </toggleGroup></RadioButton>
+      <RadioButton layoutX="357.0" layoutY="82.0" mnemonicParsing="false" onAction="#sortByWeekRadioButton" text="Sort by Week" toggleGroup="$sortingToggleGroup" />
+      <RadioButton layoutX="290.0" layoutY="82.0" mnemonicParsing="false" onAction="#sortAllButton" prefHeight="17.0" prefWidth="41.0" selected="true" text="All" toggleGroup="$sortingToggleGroup" />
    </children>
 </AnchorPane>

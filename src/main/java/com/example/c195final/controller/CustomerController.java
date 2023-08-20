@@ -69,8 +69,11 @@ public class CustomerController implements Initializable {
     }
 
     public void customerDeleteAction(ActionEvent event) throws SQLException {
+        //show warning for cascade delete of appointment
+
         String customerID = customerDeleteField.getText();
         customerDelete(Integer.parseInt(customerID));
+        buildData();
         tableview.refresh();
     }
 
