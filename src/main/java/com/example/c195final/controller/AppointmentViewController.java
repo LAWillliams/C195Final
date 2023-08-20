@@ -2,18 +2,11 @@ package com.example.c195final.controller;
 
 import com.example.c195final.helper.JDBC;
 import com.example.c195final.model.Appointment;
-
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.temporal.IsoFields;
-
-import javafx.application.Platform;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -26,14 +19,9 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.IsoFields;
-import java.util.Comparator;
 import java.util.ResourceBundle;
 import javafx.util.Callback;
-import javafx.stage.WindowEvent;
+
 
 public class AppointmentViewController implements Initializable {
 
@@ -69,7 +57,8 @@ public class AppointmentViewController implements Initializable {
     /**
      * This defines a method to query the selected row and delete it from the database
      */
-    public static int appointmentDelete(int appointmentID) throws SQLException {
+    public int appointmentDelete(int appointmentID) throws SQLException {
+        JDBC.openConnection();
         String sql = "DELETE FROM appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
         ps.setInt(1, appointmentID);
@@ -79,8 +68,22 @@ public class AppointmentViewController implements Initializable {
 
     public void appointmentDeleteButton(ActionEvent event) throws SQLException {
         String appointmentID = appointmentDeleteField.getText();
-        appointmentDelete(Integer.parseInt(appointmentID));
-        tableview.refresh();
+        int deletedAppointmentID = Integer.parseInt(appointmentID);
+
+        int rowsAffected = appointmentDelete(deletedAppointmentID);
+        if (rowsAffected > 0) {
+            // Remove the deleted customer row from the data list
+            for (ObservableList<String> row : data) {
+                String appointmentId = row.get(0); // Assuming Customer_ID is the first column
+                if (appointmentId.equals(appointmentID)) {
+                    data.remove(row);
+                    break; // Break once the row is removed
+                }
+            }
+
+            // Refresh the TableView
+            tableview.refresh();
+        }
     }
 
     public void appointmentAddButton(ActionEvent event) throws IOException {

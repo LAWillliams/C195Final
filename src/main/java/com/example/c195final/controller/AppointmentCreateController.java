@@ -84,6 +84,7 @@ public class AppointmentCreateController implements Initializable {
 
     public int appointmentSaveAction(ActionEvent event) throws SQLException, IOException {
         String sql = "INSERT INTO appointments (Appointment_ID,Title,Description,Location,Type,Start,End,Customer_ID,Contact_ID,User_ID)VALUES(?,?,?,?,?,?,?,?,?,?)";
+        JDBC.openConnection();
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
         // Validate and parse integer values

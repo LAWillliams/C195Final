@@ -8,24 +8,18 @@
       <Button layoutY="-4.0" mnemonicParsing="false" onAction="#updateCustomerBackButtonAction" prefHeight="31.0" prefWidth="41.0" text="Back" />
       <Label layoutX="14.0" layoutY="42.0" text="Customer ID" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="50.0" />
       <Label layoutX="15.0" layoutY="65.0" text="Customer Name" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="85.0" />
-      <Label layoutX="207.0" layoutY="82.0" text="Created Date" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="215.0" />
-      <Label layoutX="294.0" layoutY="90.0" text="Created By" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="250.0" />
-      <Label layoutX="336.0" layoutY="126.0" text="Last Updated" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="285.0" />
       <Label layoutX="166.0" layoutY="143.0" text="Address" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="115.0" />
       <Label layoutX="109.0" layoutY="273.0" text="Phone" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="180.0" />
       <Label layoutX="44.0" layoutY="229.0" text="Postal Code" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="145.0" />
-      <Label layoutX="25.0" layoutY="295.0" text="Last Updated By" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="320.0" />
-      <Label layoutX="172.0" layoutY="304.0" text="Division ID" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="355.0" />
+      <Label layoutX="16.0" layoutY="279.0" text="Division" AnchorPane.leftAnchor="16.0" AnchorPane.topAnchor="279.0" />
       <TextField fx:id="Customer_ID" editable="false" layoutX="82.0" layoutY="46.0" AnchorPane.leftAnchor="125.0" />
       <TextField fx:id="Customer_Name" layoutX="102.0" layoutY="81.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="85.0" />
       <TextField fx:id="Address" layoutX="59.0" layoutY="111.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="115.0" />
       <TextField fx:id="Postal_Code" layoutX="82.0" layoutY="141.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="145.0" />
       <TextField fx:id="Phone" layoutX="51.0" layoutY="176.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="180.0" />
-      <TextField fx:id="Create_Date" layoutX="86.0" layoutY="211.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="215.0" />
-      <TextField fx:id="Created_By" layoutX="73.0" layoutY="246.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="250.0" />
-      <TextField fx:id="Last_Update" layoutX="86.0" layoutY="281.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="285.0" />
-      <TextField fx:id="Last_Updated_By" layoutX="102.0" layoutY="316.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="320.0" />
-      <TextField fx:id="Division_ID" layoutX="73.0" layoutY="351.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="355.0" />
       <Button layoutX="437.0" layoutY="46.0" mnemonicParsing="false" onAction="#updateCustomerSaveAction" prefHeight="70.0" prefWidth="149.0" text="Save" />
+      <Label layoutX="15.0" layoutY="234.0" text="Country" />
+      <ComboBox fx:id="countryComboBox" layoutX="125.0" layoutY="230.0" prefWidth="150.0" />
+      <ComboBox fx:id="divisionComboBox" layoutX="125.0" layoutY="275.0" prefWidth="150.0" />
    </children>
 </AnchorPane>

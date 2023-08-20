@@ -69,13 +69,26 @@ public class CustomerController implements Initializable {
     }
 
     public void customerDeleteAction(ActionEvent event) throws SQLException {
-        //show warning for cascade delete of appointment
-
         String customerID = customerDeleteField.getText();
-        customerDelete(Integer.parseInt(customerID));
-        buildData();
-        tableview.refresh();
+        int deletedCustomerID = Integer.parseInt(customerID);
+
+        int rowsAffected = customerDelete(deletedCustomerID);
+        if (rowsAffected > 0) {
+            // Remove the deleted customer row from the data list
+            for (ObservableList<String> row : data) {
+                String customerId = row.get(0);
+                if (customerId.equals(customerID)) {
+                    data.remove(row);
+                    break; // Break once the row is removed
+                }
+            }
+
+            // Refresh the TableView
+            tableview.refresh();
+        }
     }
+
+
 
     public static Customer getCustomerByID(int customerID) throws SQLException {
         String sql = "SELECT * FROM customers WHERE Customer_ID = ?";
