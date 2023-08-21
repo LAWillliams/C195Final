@@ -13,10 +13,17 @@ import javafx.stage.Stage;;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.logging.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
+import static com.mysql.cj.conf.PropertyKey.logger;
 
 /**
  * @author lukea
@@ -27,6 +34,7 @@ public class LoginController implements Initializable {
     @FXML public TextField passwordField;
     @FXML public Label location;
     @FXML public Label errorLabel;
+    private static final Logger log = Logger.getLogger(LoginController.class.getName());
     ResourceBundle rb = ResourceBundle.getBundle("/com/example/c195final/Nat", Locale.getDefault());
     /**
      * This method queries the database for a username and password
@@ -61,7 +69,11 @@ public class LoginController implements Initializable {
         String password = passwordField.getText();
 
         LoginController userAuthentication = new LoginController();
-        if (userAuthentication.isValidCredentials(username, password)) {
+        boolean isValid = userAuthentication.isValidCredentials(username, password);
+
+        logLoginActivity(username, isValid); // Log the login attempt
+
+        if (isValid) {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
             Parent parent = loader.load();
@@ -75,6 +87,34 @@ public class LoginController implements Initializable {
             errorLabel.setText("Invalid username or password");
         }
     }
+
+
+    private void logLoginActivity(String username, boolean isSuccess) {
+        try {
+            FileHandler fileHandler = new FileHandler("login_activity.txt", true); // Append to the existing file
+            SimpleFormatter formatter = new SimpleFormatter();
+            fileHandler.setFormatter(formatter);
+            log.addHandler(fileHandler);
+
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            if (isSuccess) {
+                log.log(Level.INFO, "Successful login attempt: User = " + username + ", Timestamp = " + timestamp);
+            } else {
+                log.log(Level.WARNING, "Unsuccessful login attempt: User = " + username + ", Timestamp = " + timestamp);
+            }
+
+            fileHandler.close();
+
+            // Print the path of the saved file
+            String filePath = System.getProperty("user.dir") + "/login_activity.txt";
+            System.out.println("Login activity log file saved to: " + filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
 
     /**

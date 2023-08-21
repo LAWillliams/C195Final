@@ -4,16 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Updated Customer controllers for adding and updating to use combo boxes">
+    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Finished appointment classes and reports class">
+      <change afterPath="$PROJECT_DIR$/login_activity.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentCreateController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentCreateController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/AppointmentViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/ReportsController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/ReportsController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateAppointmentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/UpdateAppointmentController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Contact.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/model/Contact.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentCreate.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/AppointmentCreate.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Reports.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Reports.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/UpdateAppointment.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/UpdateAppointment.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/c195final/controller/LoginController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -163,7 +158,14 @@
       <option name="project" value="LOCAL" />
       <updated>1692507389944</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Finished appointment classes and reports class">
+      <created>1692594305004</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1692594305004</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -174,7 +176,8 @@
     <MESSAGE value="Fifth Commit&#10;&#10;Worked on update function for customer and created customer model" />
     <MESSAGE value="Implemented sorting functions for AppointmentViewController" />
     <MESSAGE value="Updated Customer controllers for adding and updating to use combo boxes" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated Customer controllers for adding and updating to use combo boxes" />
+    <MESSAGE value="Finished appointment classes and reports class" />
+    <option name="LAST_COMMIT_MESSAGE" value="Finished appointment classes and reports class" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/C195Final$CustomerController.ic" NAME="CustomerController Coverage Results" MODIFIED="1688875058746" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
