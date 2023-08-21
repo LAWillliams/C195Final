@@ -34,9 +34,6 @@ public class AppointmentViewController implements Initializable {
     @FXML
     public TextField appointmentUpdateField;
 
-    @FXML
-    private ToggleGroup sortingToggleGroup;
-
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
 
@@ -67,6 +64,7 @@ public class AppointmentViewController implements Initializable {
     }
 
     public void appointmentDeleteButton(ActionEvent event) throws SQLException {
+        JDBC.openConnection();
         String appointmentID = appointmentDeleteField.getText();
         int deletedAppointmentID = Integer.parseInt(appointmentID);
 
@@ -128,6 +126,7 @@ public class AppointmentViewController implements Initializable {
 
     public void appointmentUpdateButton(ActionEvent event) throws SQLException, IOException {
 
+        JDBC.openConnection();
         String appointmentID = appointmentUpdateField.getText().trim(); // Trim to remove leading/trailing spaces
 
         // Check if the customerID is not empty or null
@@ -297,6 +296,7 @@ public class AppointmentViewController implements Initializable {
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        JDBC.openConnection();
         buildData();
 
     }

@@ -16,16 +16,20 @@
       <Label layoutX="15.0" layoutY="310.0" text="End Date and Time" />
       <Label layoutX="15.0" layoutY="340.0" text="Customer ID" />
       <Label layoutX="15.0" layoutY="370.0" text="User ID" />
-      <TextField fx:id="Appointment_ID" layoutX="151.0" layoutY="43.0" promptText="Enter Appointment ID" />
-      <TextField fx:id="Customer_ID" layoutX="151.0" layoutY="336.0" promptText="Enter Customer ID" />
-      <TextField fx:id="User_ID" layoutX="151.0" layoutY="366.0" promptText="Enter User ID" />
-      <TextField fx:id="End" layoutX="151.0" layoutY="306.0" promptText="Enter End Date and Time" />
-      <TextField fx:id="Start" layoutX="151.0" layoutY="276.0" promptText="Enter Start Date and Time" />
+      <TextField fx:id="Appointment_ID" editable="false" layoutX="151.0" layoutY="43.0" promptText="Enter Appointment ID" />
       <TextField fx:id="Type" layoutX="151.0" layoutY="246.0" promptText="Enter Type" />
-      <TextField fx:id="Contact_ID" layoutX="151.0" layoutY="216.0" promptText="Enter Contact" />
       <TextField fx:id="Location" layoutX="151.0" layoutY="188.0" promptText="Enter Location" />
       <TextField fx:id="Description" layoutX="151.0" layoutY="111.0" prefHeight="70.0" prefWidth="149.0" promptText="Enter Description" />
       <TextField fx:id="Title" layoutX="151.0" layoutY="78.0" promptText="Enter Title" />
+      <ComboBox fx:id="contactComboBox" layoutX="151.0" layoutY="216.0" prefWidth="150.0" promptText="Select Contact" />
+      <ComboBox fx:id="customerComboBox" layoutX="151.0" layoutY="336.0" prefWidth="150.0" promptText="Select Customer ID" />
+      <ComboBox fx:id="userComboBox" layoutX="151.0" layoutY="366.0" prefWidth="150.0" promptText="Select User ID" />
+      <DatePicker fx:id="startDatePicker" layoutX="151.0" layoutY="276.0" prefHeight="25.0" prefWidth="150.0" promptText="Enter Start Date" />
+      <DatePicker fx:id="endDatePicker" layoutX="151.0" layoutY="306.0" prefHeight="25.0" prefWidth="150.0" promptText="Enter End Date" />
+      <ComboBox fx:id="startHourComboBox" layoutX="301.0" layoutY="276.0" prefHeight="25.0" prefWidth="101.0" promptText="Enter Hour" />
+      <ComboBox fx:id="startMinuteComboBox" layoutX="402.0" layoutY="276.0" prefHeight="25.0" prefWidth="116.0" promptText="Enter Minutes" />
+      <ComboBox fx:id="endHourComboBox" layoutX="301.0" layoutY="306.0" prefHeight="25.0" prefWidth="101.0" promptText="Enter Hour" />
+      <ComboBox fx:id="endMinuteComboBox" layoutX="402.0" layoutY="306.0" prefHeight="25.0" prefWidth="116.0" promptText="Enter Minutes" />
       <Button layoutX="470.0" layoutY="15.0" mnemonicParsing="false" onAction="#appointmentUpdateSaveAction" prefHeight="70.0" prefWidth="116.0" text="Save" />
    </children>
 </AnchorPane>

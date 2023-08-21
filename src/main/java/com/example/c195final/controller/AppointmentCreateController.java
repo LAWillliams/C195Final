@@ -1,6 +1,7 @@
 package com.example.c195final.controller;
 
 import com.example.c195final.helper.JDBC;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,15 +10,24 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
+import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AppointmentCreateController implements Initializable {
 
@@ -37,19 +47,25 @@ public class AppointmentCreateController implements Initializable {
     public TextField Location;
 
     @FXML
-    public TextField Start;
-
+    public DatePicker startDatePicker;
     @FXML
-    public TextField End;
-
+    public ComboBox<Integer> startHourComboBox;
     @FXML
-    public TextField Customer_ID;
-
+    public ComboBox<Integer> startMinuteComboBox;
     @FXML
-    public TextField User_ID;
-
+    public DatePicker endDatePicker;
     @FXML
-    public TextField Contact_ID;
+    public ComboBox<Integer> endHourComboBox;
+    @FXML
+    public ComboBox<Integer> endMinuteComboBox;
+    @FXML
+    public ComboBox<String> contactComboBox;
+    @FXML
+    public ComboBox<Integer> customerComboBox;
+    @FXML
+    public ComboBox<Integer> userComboBox;
+
+
 
     @FXML
     public void appointmentCreateBackButton(ActionEvent event) throws IOException {
@@ -82,43 +98,161 @@ public class AppointmentCreateController implements Initializable {
         alert.showAndWait();
     }
 
-    public int appointmentSaveAction(ActionEvent event) throws SQLException, IOException {
-        String sql = "INSERT INTO appointments (Appointment_ID,Title,Description,Location,Type,Start,End,Customer_ID,Contact_ID,User_ID)VALUES(?,?,?,?,?,?,?,?,?,?)";
-        JDBC.openConnection();
+    public int getContactIdByName(String contactName) throws SQLException {
+        String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setString(1, contactName);
 
-        // Validate and parse integer values
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            return rs.getInt("Contact_ID");
+        }
+
+        // Return a default value or handle the case when contact is not found
+        return -1;
+    }
+
+
+    public int appointmentSaveAction(ActionEvent event) throws SQLException, IOException {
+        JDBC.openConnection();
         try {
-            ps.setInt(1, Integer.parseInt(Appointment_ID.getText()));
-            ps.setInt(8, Integer.parseInt(Customer_ID.getText()));
-            ps.setInt(9, Integer.parseInt(Contact_ID.getText()));
-            ps.setInt(10, Integer.parseInt(User_ID.getText()));
+            JDBC.openConnection();
+            int selectedCustomerId = customerComboBox.getSelectionModel().getSelectedItem();
+            int selectedUserId = userComboBox.getSelectionModel().getSelectedItem();
+            String selectedContact = contactComboBox.getSelectionModel().getSelectedItem();
+
+            int contactId = getContactIdByName(selectedContact);
+
+            // Get the values from UI elements
+            String title = Title.getText();
+            String description = Description.getText();
+            String location = Location.getText();
+            String type = Type.getText();
+
+            LocalDate startDate = startDatePicker.getValue();
+            int startHour = startHourComboBox.getSelectionModel().getSelectedItem();
+            int startMinute = startMinuteComboBox.getSelectionModel().getSelectedItem();
+            LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.of(startHour, startMinute));
+
+            LocalDate endDate = endDatePicker.getValue();
+            int endHour = endHourComboBox.getSelectionModel().getSelectedItem();
+            int endMinute = endMinuteComboBox.getSelectionModel().getSelectedItem();
+            LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.of(endHour, endMinute));
+
+            String sql = "INSERT INTO appointments (Title, Description, Location, Type, Start, End, Customer_ID, Contact_ID, User_ID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            JDBC.openConnection();
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            // Set parameters
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
+            ps.setTimestamp(5, Timestamp.valueOf(startDateTime));
+            ps.setTimestamp(6, Timestamp.valueOf(endDateTime));
+            ps.setInt(7, selectedCustomerId);
+            ps.setInt(8, contactId);
+            ps.setInt(9, selectedUserId);
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected == 1) {
+                // Get the auto-generated Appointment_ID
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    int appointmentId = generatedKeys.getInt(1);
+                    showSuccessAlert();
+                    appointmentCreateBackButton(event); // Go back to the AppointmentView.fxml screen
+                }
+            } else {
+                showErrorAlert("Failed to save appointment data.");
+            }
+
+            return rowsAffected;
         } catch (NumberFormatException e) {
-            showErrorAlert("Invalid integer input. Please provide valid integer values.");
+            showErrorAlert("Invalid input. Please provide valid values.");
             return 0; // Indicate that the operation failed
         }
+    }
 
-        ps.setString(2, Title.getText());
-        ps.setString(3, Description.getText());
-        ps.setString(4, Location.getText());
-        ps.setString(5, Type.getText());
-        ps.setString(6, Start.getText());
-        ps.setString(7, End.getText());
+    private void populateTimeComboBoxes() {
+        List<Integer> hours = IntStream.rangeClosed(0, 23).boxed().collect(Collectors.toList());
+        List<Integer> minutes = IntStream.rangeClosed(0, 59).boxed().collect(Collectors.toList());
 
-        int rowsAffected = ps.executeUpdate();
+        startHourComboBox.setItems(FXCollections.observableArrayList(hours));
+        startMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
+        endHourComboBox.setItems(FXCollections.observableArrayList(hours));
+        endMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
+    }
 
-        if (rowsAffected == 1) {
-            showSuccessAlert();
-            appointmentCreateBackButton(event); // Go back to the Customer.fxml screen
-        } else {
-            showErrorAlert("Failed to save customer data.");
+    private void populateContactComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT Contact_Name FROM contacts";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<String> contactNames = new ArrayList<>();
+            while (rs.next()) {
+                contactNames.add(rs.getString("Contact_Name"));
+            }
+
+            contactComboBox.setItems(FXCollections.observableArrayList(contactNames));
+            JDBC.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return rowsAffected;
+    }
+
+    private void populateCustomerComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT Customer_ID FROM customers";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Integer> customerIds = new ArrayList<>();
+            while (rs.next()) {
+                customerIds.add(rs.getInt("Customer_ID"));
+            }
+
+            customerComboBox.setItems(FXCollections.observableArrayList(customerIds));
+            JDBC.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void populateUserComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT User_ID FROM users";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Integer> userIds = new ArrayList<>();
+            while (rs.next()) {
+                userIds.add(rs.getInt("User_ID"));
+            }
+
+            userComboBox.setItems(FXCollections.observableArrayList(userIds));
+            JDBC.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 
-    @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        // Populate the contactComboBox with actual contact names from the database
+        populateContactComboBox();
+        populateCustomerComboBox();
+        populateUserComboBox();
+        populateTimeComboBoxes();
     }
+
+
+
+
 }
