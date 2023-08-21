@@ -88,7 +88,6 @@ public class LoginController implements Initializable {
         }
     }
 
-
     private void logLoginActivity(String username, boolean isSuccess) {
         try {
             FileHandler fileHandler = new FileHandler("login_activity.txt", true); // Append to the existing file

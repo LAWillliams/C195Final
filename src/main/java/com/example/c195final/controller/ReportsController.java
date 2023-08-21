@@ -32,17 +32,20 @@ public class ReportsController implements Initializable {
 
     @FXML
     public void reportsBackButtonAction(ActionEvent event) throws IOException {
+        loadScreen("/com/example/c195final/MainScreen.fxml", event);
+    }
 
+    private void loadScreen(String resource, ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
+        loader.setLocation(getClass().getResource(resource));
         Parent parent = loader.load();
         Scene scene = new Scene(parent);
         MainScreenController controller = loader.getController();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
-
     }
+
 
     @FXML
     public void generateAppointmentTypeAndMonthReport(ActionEvent event) {
