@@ -36,7 +36,11 @@ public class AppointmentViewController implements Initializable {
 
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
-
+    /**
+     * Handles the action when the "Back" button is clicked.
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     @FXML
     public void appointmentBackButtonAction(ActionEvent event) throws IOException {
 

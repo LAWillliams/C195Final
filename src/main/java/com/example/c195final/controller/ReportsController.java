@@ -22,20 +22,19 @@ import java.util.ResourceBundle;
 public class ReportsController implements Initializable {
 
     @FXML
-    private Button appointmentTypeAndMonthReportButton;
+    public TextArea reportTextArea;
 
-    @FXML
-    private Button contactScheduleReportButton;
-
-    @FXML
-    private TextArea reportTextArea;
-
+    /**
+     * Handles the action when the "Back" button is clicked.
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     @FXML
     public void reportsBackButtonAction(ActionEvent event) throws IOException {
         loadScreen("/com/example/c195final/MainScreen.fxml", event);
     }
 
-    private void loadScreen(String resource, ActionEvent event) throws IOException {
+    public void loadScreen(String resource, ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(getClass().getResource(resource));
         Parent parent = loader.load();
@@ -46,7 +45,11 @@ public class ReportsController implements Initializable {
         stage.show();
     }
 
-
+    /**
+     * Generates a report of appointment types and their counts for each month.
+     *
+     * @param event The ActionEvent triggering the report generation.
+     */
     @FXML
     public void generateAppointmentTypeAndMonthReport(ActionEvent event) {
         try {
@@ -77,6 +80,11 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**
+     * Generates a report of contact schedules.
+     *
+     * @param event The ActionEvent triggering the report generation.
+     */
     @FXML
     public void generateContactScheduleReport(ActionEvent event) {
         try {
@@ -120,6 +128,11 @@ public class ReportsController implements Initializable {
         }
     }
 
+    /**
+     * Generates a report of customer divisions.
+     *
+     * @param event The ActionEvent triggering the report generation.
+     */
     @FXML
     public void generateCustomerDivisionReport(ActionEvent event) {
         try {

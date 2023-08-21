@@ -66,7 +66,11 @@ public class AppointmentCreateController implements Initializable {
     public ComboBox<Integer> userComboBox;
 
 
-
+    /**
+     * Handles the action when the "Back" button is clicked.
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     @FXML
     public void appointmentCreateBackButton(ActionEvent event) throws IOException {
 
@@ -81,7 +85,7 @@ public class AppointmentCreateController implements Initializable {
 
     }
 
-    private void showSuccessAlert() {
+    public void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("Customer saved successfully.");
@@ -89,7 +93,7 @@ public class AppointmentCreateController implements Initializable {
         alert.showAndWait();
     }
 
-    private void showErrorAlert(String errorMessage) {
+    public void showErrorAlert(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Error occurred while saving appointment.");
@@ -176,7 +180,7 @@ public class AppointmentCreateController implements Initializable {
         }
     }
 
-    private void populateTimeComboBoxes() {
+    public void populateTimeComboBoxes() {
         List<Integer> hours = IntStream.rangeClosed(0, 23).boxed().collect(Collectors.toList());
         List<Integer> minutes = IntStream.rangeClosed(0, 59).boxed().collect(Collectors.toList());
 
@@ -186,7 +190,7 @@ public class AppointmentCreateController implements Initializable {
         endMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
     }
 
-    private void populateContactComboBox() {
+    public void populateContactComboBox() {
         try {
             JDBC.openConnection();
             String sql = "SELECT Contact_Name FROM contacts";
@@ -205,7 +209,7 @@ public class AppointmentCreateController implements Initializable {
         }
     }
 
-    private void populateCustomerComboBox() {
+    public void populateCustomerComboBox() {
         try {
             JDBC.openConnection();
             String sql = "SELECT Customer_ID FROM customers";
@@ -224,7 +228,7 @@ public class AppointmentCreateController implements Initializable {
         }
     }
 
-    private void populateUserComboBox() {
+    public void populateUserComboBox() {
         try {
             JDBC.openConnection();
             String sql = "SELECT User_ID FROM users";

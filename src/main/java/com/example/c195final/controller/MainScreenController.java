@@ -15,12 +15,22 @@ import java.util.ResourceBundle;
 
 public class MainScreenController implements Initializable {
 
+    /**
+     * Functional interface for loading screens.
+     */
     @FunctionalInterface
     interface ScreenLoader {
         void load(ActionEvent event, String resource);
     }
 
-    private ScreenLoader createScreenLoader(String resource) {
+
+    /**
+     * Creates a screen loader for loading new screens.
+     *
+     * @param resource The resource location of the FXML file for the screen.
+     * @return A ScreenLoader instance capable of loading the specified screen.
+     */
+    public ScreenLoader createScreenLoader(String resource) {
         return (event, res) -> {
             try {
                 FXMLLoader loader = new FXMLLoader();

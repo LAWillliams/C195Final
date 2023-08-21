@@ -36,6 +36,11 @@ public class CustomerCreateController implements Initializable {
     @FXML public ComboBox<String> countryComboBox;
 
 
+    /**
+     * Handles the action when the "Back" button is clicked.
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     public void customerCreateBackButtonAction(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -49,8 +54,11 @@ public class CustomerCreateController implements Initializable {
 
     }
 
-
-    private void showSuccessAlert() {
+    /**
+     * Displays a success alert.
+     * Shows an information alert indicating that the customer data has been saved successfully.
+     */
+    public void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("Customer saved successfully.");
@@ -58,7 +66,12 @@ public class CustomerCreateController implements Initializable {
         alert.showAndWait();
     }
 
-    private void showErrorAlert(String errorMessage) {
+    /**
+     * Displays an error alert.
+     * Shows an error alert indicating that an error occurred while saving the customer data.
+     * @param errorMessage The error message to be displayed in the alert.
+     */
+    public void showErrorAlert(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Error occurred while saving customer.");
@@ -92,7 +105,13 @@ public class CustomerCreateController implements Initializable {
         return rowsAffected;
     }
 
-
+    /**
+     * Initializes the controller with data from the database.
+     * Populates the countryComboBox and manages divisionComboBox based on selected country.
+     *
+     * @param url The URL of the location used to resolve the object.
+     * @param resourceBundle The ResourceBundle to be used for localization.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();

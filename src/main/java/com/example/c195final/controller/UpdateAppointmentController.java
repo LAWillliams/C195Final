@@ -79,7 +79,7 @@ public class UpdateAppointmentController implements Initializable {
 
     }
 
-    private void showSuccessAlert() {
+    public void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("Appointment saved successfully.");
@@ -87,7 +87,7 @@ public class UpdateAppointmentController implements Initializable {
         alert.showAndWait();
     }
 
-    private void showErrorAlert(String errorMessage) {
+    public void showErrorAlert(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Error occurred while saving appointment.");
@@ -96,6 +96,13 @@ public class UpdateAppointmentController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Retrieves the contact ID based on the contact name.
+     *
+     * @param contactName The name of the contact to find the ID for.
+     * @return The contact ID, or -1 if not found.
+     * @throws SQLException If a database access error occurs.
+     */
     public int getContactIdByName(String contactName) throws SQLException {
         JDBC.openConnection();
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
@@ -111,6 +118,13 @@ public class UpdateAppointmentController implements Initializable {
         // Return a default value or handle the case when contact is not found
         return -1;
     }
+
+    /**
+     * Sets the fields in the UI with appointment data.
+     *
+     * @param appointment The appointment to display in the UI.
+     * @throws SQLException If a database access error occurs.
+     */
     public void setAppointment(Appointment appointment) throws SQLException {
         JDBC.openConnection();
         Appointment_ID.setText(String.valueOf(appointment.getAppointmentId()));
@@ -144,8 +158,10 @@ public class UpdateAppointmentController implements Initializable {
 
     }
 
-
-    private void populateContactComboBox() {
+    /**
+     * Populates the contact combo box with contact names retrieved from the database.
+     */
+    public void populateContactComboBox() {
         try {
             JDBC.openConnection();
             String sql = "SELECT * FROM contacts";
@@ -169,6 +185,14 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Handles the save action for updating an appointment.
+     *
+     * @param event The ActionEvent triggering the update and save action.
+     * @return The number of rows affected, or 0 if the operation failed.
+     * @throws SQLException If a database access error occurs.
+     * @throws IOException If an I/O error occurs.
+     */
     public int appointmentUpdateSaveAction(ActionEvent event) throws SQLException, IOException {
         JDBC.openConnection();
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, Contact_ID = ?, User_ID = ? WHERE Appointment_ID = ?";

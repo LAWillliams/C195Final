@@ -34,7 +34,7 @@ public class LoginController implements Initializable {
     @FXML public TextField passwordField;
     @FXML public Label location;
     @FXML public Label errorLabel;
-    private static final Logger log = Logger.getLogger(LoginController.class.getName());
+    public static final Logger log = Logger.getLogger(LoginController.class.getName());
     ResourceBundle rb = ResourceBundle.getBundle("/com/example/c195final/Nat", Locale.getDefault());
     /**
      * This method queries the database for a username and password
@@ -88,7 +88,13 @@ public class LoginController implements Initializable {
         }
     }
 
-    private void logLoginActivity(String username, boolean isSuccess) {
+    /**
+     * Logs login activity to a file.
+     *
+     * @param username The username associated with the login attempt.
+     * @param isSuccess Indicates whether the login attempt was successful or not.
+     */
+    public void logLoginActivity(String username, boolean isSuccess) {
         try {
             FileHandler fileHandler = new FileHandler("login_activity.txt", true); // Append to the existing file
             SimpleFormatter formatter = new SimpleFormatter();

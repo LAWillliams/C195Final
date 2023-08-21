@@ -35,6 +35,12 @@ public class UpdateCustomerController implements Initializable {
     @FXML public ComboBox<DivisionItem> divisionComboBox;
     @FXML public ComboBox<String> countryComboBox;
 
+    /**
+     * Handles the action to navigate back to the Customer screen.
+     *
+     * @param event The event triggering the action.
+     * @throws IOException If an I/O error occurs.
+     */
     public void updateCustomerBackButtonAction(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -47,7 +53,7 @@ public class UpdateCustomerController implements Initializable {
         stage.show();
     }
 
-    private void showSuccessAlert() {
+    public void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
         alert.setHeaderText("Customer saved successfully.");
@@ -55,7 +61,7 @@ public class UpdateCustomerController implements Initializable {
         alert.showAndWait();
     }
 
-    private void showErrorAlert(String errorMessage) {
+    public void showErrorAlert(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText("Error occurred while saving customer.");
@@ -64,6 +70,11 @@ public class UpdateCustomerController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Sets the fields in the user interface with values from the provided Customer object.
+     *
+     * @param customer The Customer object containing the data to be displayed in the user interface.
+     */
     public void setCustomer(Customer customer) {
         Customer_ID.setText(String.valueOf(customer.getCustomer_ID()));
         Customer_Name.setText(customer.getCustomer_Name());
@@ -73,6 +84,14 @@ public class UpdateCustomerController implements Initializable {
         // Set other relevant fields in the controller based on the Customer object
     }
 
+    /**
+     * Handles the action to update and save customer information.
+     *
+     * @param event The event triggering the action.
+     * @return The number of rows affected by the update operation.
+     * @throws SQLException If a database access error occurs.
+     * @throws IOException  If an I/O error occurs.
+     */
     public int updateCustomerSaveAction(ActionEvent event) throws SQLException, IOException {
         JDBC.openConnection();
         String sql = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";
@@ -106,7 +125,12 @@ public class UpdateCustomerController implements Initializable {
         return rowsAffected;
     }
 
-
+    /**
+     * Initializes the controller, populating combo boxes and adding listeners.
+     *
+     * @param url            The URL to initialize the controller.
+     * @param resourceBundle The resource bundle associated with the controller.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();

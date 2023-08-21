@@ -39,10 +39,10 @@ public class CustomerController implements Initializable {
     public TextField customerUpdateField;
 
     /**
-     * Takes the user back to the main screen
-     * @param event takes user input in the form of a mouse click
-     * @throws IOException handles errors
-     * */
+     * Handles the action when the "Back" button is clicked.
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     @FXML
     public void customerBackButtonAction(ActionEvent event) throws IOException {
 
@@ -58,8 +58,12 @@ public class CustomerController implements Initializable {
     }
 
     /**
-     * This defines a method to query the selected row and delete it from the database
-     * */
+     * Deletes a customer record from the database based on the provided customer ID.
+     *
+     * @param customerID The ID of the customer to be deleted.
+     * @return The number of rows affected by the deletion operation.
+     * @throws SQLException If a database access error occurs.
+     */
     public static int customerDelete(int customerID) throws SQLException {
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
