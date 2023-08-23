@@ -152,7 +152,16 @@ public class UpdateCustomerController implements Initializable {
             // Handle exception appropriately
         }
 
-        // Add listener to countryComboBox to fetch divisions based on selected country
+        /**
+         * @LAMBDA
+         * Adds a listener to the {@code countryComboBox} to dynamically populate the {@code divisionComboBox}
+         * with first-level divisions based on the selected country.
+         * This listener uses a lambda expression to define the behavior when the selected country changes.
+         *
+         * @param observable The ObservableValue representing the selected country in the {@code countryComboBox}.
+         * @param oldValue   The previous selected country value.
+         * @param newValue   The newly selected country value.
+         */
         countryComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 // Fetch first-level divisions for the selected country
@@ -161,8 +170,7 @@ public class UpdateCustomerController implements Initializable {
                     JDBC.openConnection();
                     Connection connection = JDBC.getConnection();
                     PreparedStatement statement = connection.prepareStatement("SELECT Division_ID, Division FROM first_level_divisions WHERE Country_ID = ?");
-                    // Replace 1 with the appropriate value representing the selected country's ID
-                    statement.setInt(1, 1); // Example: Replace 1 with actual country ID
+                    statement.setInt(1, 1);
                     ResultSet rs = statement.executeQuery();
 
                     while (rs.next()) {

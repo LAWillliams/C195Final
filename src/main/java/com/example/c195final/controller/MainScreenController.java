@@ -25,7 +25,8 @@ public class MainScreenController implements Initializable {
 
 
     /**
-     * Creates a screen loader for loading new screens.
+     * @LAMBDA
+     * This LAMBDA creates a screen loader for loading new screens. Which is then used to load the FXML files for appointments, customers, and reports
      *
      * @param resource The resource location of the FXML file for the screen.
      * @return A ScreenLoader instance capable of loading the specified screen.

@@ -6,7 +6,7 @@ module com.example.c195final {
     requires com.dlsc.formsfx;
     requires org.kordamp.bootstrapfx.core;
     requires java.sql;
-    requires mysql.connector.j;
+    requires mysql.connector.java;
 
     opens com.example.c195final to javafx.fxml;
     exports com.example.c195final;

@@ -8,11 +8,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.stage.Stage;;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -23,7 +29,8 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-import static com.mysql.cj.conf.PropertyKey.logger;
+
+;
 
 /**
  * @author lukea
@@ -64,6 +71,8 @@ public class LoginController implements Initializable {
      * */
     @FXML
     public void loginButtonAction(ActionEvent event) throws IOException {
+
+        JDBC.openConnection();
         // Store username and password into variables
         String username = usernameField.getText();
         String password = passwordField.getText();
@@ -74,6 +83,7 @@ public class LoginController implements Initializable {
         logLoginActivity(username, isValid); // Log the login attempt
 
         if (isValid) {
+            JDBC.openConnection();
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
             Parent parent = loader.load();
@@ -132,7 +142,7 @@ public class LoginController implements Initializable {
     {
         try
         {
-
+            JDBC.openConnection();
             Locale locale = Locale.getDefault();
             Locale.setDefault(locale);
 
