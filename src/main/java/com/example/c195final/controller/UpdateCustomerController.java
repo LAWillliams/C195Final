@@ -70,6 +70,25 @@ public class UpdateCustomerController implements Initializable {
         alert.showAndWait();
     }
 
+    private String fetchDivisionNameById(int divisionId) {
+        String divisionName = ""; // Default value
+        try {
+            JDBC.openConnection();
+            Connection connection = JDBC.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT Division FROM first_level_divisions WHERE Division_ID = ?");
+            statement.setInt(1, divisionId);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                divisionName = rs.getString("Division");
+            }
+            JDBC.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception appropriately
+        }
+        return divisionName;
+    }
+
     /**
      * Sets the fields in the user interface with values from the provided Customer object.
      *
@@ -81,7 +100,83 @@ public class UpdateCustomerController implements Initializable {
         Address.setText(customer.getAddress());
         Postal_Code.setText(String.valueOf(customer.getPostal_Code()));
         Phone.setText(String.valueOf(customer.getPhone()));
-        // Set other relevant fields in the controller based on the Customer object
+
+        int customerDivisionId = customer.getDivision_ID();
+        String customerDivisionName = fetchDivisionNameById(customerDivisionId);
+        String customerCountry = fetchCountryByDivision(customerDivisionId);
+
+        // Set the country and its divisions before attempting to set the division.
+        countryComboBox.setValue(customerCountry);
+
+        // Fetch and set divisions based on country
+        try {
+            int countryId = getCountryIdByName(customerCountry);
+            ObservableList<DivisionItem> divisions = FXCollections.observableArrayList();
+            JDBC.openConnection();
+            Connection connection = JDBC.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT Division_ID, Division FROM first_level_divisions WHERE Country_ID = ?");
+            statement.setInt(1, countryId);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                int divisionId = rs.getInt("Division_ID");
+                String division = rs.getString("Division");
+                divisions.add(new DivisionItem(divisionId, division));
+            }
+            divisionComboBox.setItems(divisions);
+            JDBC.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception appropriately
+        }
+
+        if (!customerDivisionName.isEmpty()) {
+            ObservableList<DivisionItem> divisionItems = divisionComboBox.getItems();
+            for (DivisionItem divisionItem : divisionItems) {
+                if (divisionItem.getDivisionName().equals(customerDivisionName)) {
+                    divisionComboBox.setValue(divisionItem);
+                    break;
+                }
+            }
+        }
+
+        countryComboBox.setValue(customerCountry);
+
+    }
+
+
+    public String fetchCountryByDivision(int divisionId) {
+        String country = ""; // Default value
+        try {
+            JDBC.openConnection();
+            Connection connection = JDBC.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT Country FROM countries WHERE Country_ID = ?");
+            statement.setInt(1, getCountryIdByDivision(divisionId)); // Assuming you have a method to retrieve the Country_ID from the Division_ID
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                country = rs.getString("Country");
+            }
+            JDBC.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception appropriately
+        }
+        return country;
+    }
+
+    public int getCountryIdByDivision(int divisionId) throws SQLException {
+        int countryId = -1; // Default value if not found or error occurs
+
+        JDBC.openConnection();
+        String sql = "SELECT Country_ID FROM first_level_divisions WHERE Division_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, divisionId);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            countryId = rs.getInt("Country_ID");
+        }
+
+        return countryId;
     }
 
     /**
@@ -125,6 +220,28 @@ public class UpdateCustomerController implements Initializable {
         return rowsAffected;
     }
 
+    private int getCountryIdByName(String countryName) throws SQLException {
+        int countryId = -1; // Default value if not found or error occurs
+
+        try {
+            JDBC.openConnection();
+            Connection connection = JDBC.getConnection();
+            PreparedStatement statement = connection.prepareStatement("SELECT Country_ID FROM countries WHERE Country = ?");
+            statement.setString(1, countryName);
+            ResultSet rs = statement.executeQuery();
+            if (rs.next()) {
+                countryId = rs.getInt("Country_ID");
+            }
+            JDBC.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle exception appropriately
+        }
+
+        return countryId;
+    }
+
+
     /**
      * Initializes the controller, populating combo boxes and adding listeners.
      *
@@ -135,54 +252,45 @@ public class UpdateCustomerController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         JDBC.openConnection();
         ObservableList<String> countries = FXCollections.observableArrayList();
+
         try {
             Connection connection = JDBC.getConnection();
             PreparedStatement statement = connection.prepareStatement("SELECT Country FROM countries");
             ResultSet rs = statement.executeQuery();
-
             while (rs.next()) {
                 countries.add(rs.getString("Country"));
             }
-
             countryComboBox.setItems(countries);
-
             JDBC.closeConnection();
         } catch (Exception e) {
             e.printStackTrace();
             // Handle exception appropriately
         }
 
-        /**
-         * @LAMBDA
-         * Adds a listener to the {@code countryComboBox} to dynamically populate the {@code divisionComboBox}
-         * with first-level divisions based on the selected country.
-         * This listener uses a lambda expression to define the behavior when the selected country changes.
-         *
-         * @param observable The ObservableValue representing the selected country in the {@code countryComboBox}.
-         * @param oldValue   The previous selected country value.
-         * @param newValue   The newly selected country value.
-         */
         countryComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                // Fetch first-level divisions for the selected country
-                ObservableList<DivisionItem> divisions = FXCollections.observableArrayList();
                 try {
-                    JDBC.openConnection();
-                    Connection connection = JDBC.getConnection();
-                    PreparedStatement statement = connection.prepareStatement("SELECT Division_ID, Division FROM first_level_divisions WHERE Country_ID = ?");
-                    statement.setInt(1, 1);
-                    ResultSet rs = statement.executeQuery();
+                    int countryId = getCountryIdByName(newValue); // Fetch the Country_ID based on the selected country name
+                    ObservableList<DivisionItem> divisions = FXCollections.observableArrayList();
 
-                    while (rs.next()) {
-                        int divisionId = rs.getInt("Division_ID");
-                        String division = rs.getString("Division");
-                        divisions.add(new DivisionItem(divisionId, division)); // Assuming DivisionItem has an appropriate constructor
+                    try {
+                        JDBC.openConnection();
+                        Connection connection = JDBC.getConnection();
+                        PreparedStatement statement = connection.prepareStatement("SELECT Division_ID, Division FROM first_level_divisions WHERE Country_ID = ?");
+                        statement.setInt(1, countryId); // Use the retrieved Country_ID
+                        ResultSet rs = statement.executeQuery();
+                        while (rs.next()) {
+                            int divisionId = rs.getInt("Division_ID");
+                            String division = rs.getString("Division");
+                            divisions.add(new DivisionItem(divisionId, division));
+                        }
+                        divisionComboBox.setItems(divisions);
+                        JDBC.closeConnection();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        // Handle exception appropriately
                     }
-
-                    divisionComboBox.setItems(divisions);
-
-                    JDBC.closeConnection();
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     e.printStackTrace();
                     // Handle exception appropriately
                 }
@@ -190,6 +298,9 @@ public class UpdateCustomerController implements Initializable {
                 divisionComboBox.setItems(FXCollections.emptyObservableList());
             }
         });
+
+        // ... (other setup)
     }
+
 
 }

@@ -10,7 +10,7 @@
       <Button layoutX="164.0" layoutY="94.0" onAction="#generateAppointmentTypeAndMonthReport" text="Generate Appointment Type and Month Report" />
       <Button layoutX="166.0" layoutY="42.0" onAction="#generateContactScheduleReport" prefHeight="25.0" prefWidth="268.0" text="Generate Contact Schedule Report" />
       <Button onAction="#reportsBackButtonAction" text="Back" />
-      <TextArea fx:id="reportTextArea" layoutX="15.0" layoutY="190.0" prefHeight="200.0" prefWidth="565.0" />
+      <TableView fx:id="tableview" layoutX="29.0" layoutY="95.0" prefHeight="200.0" prefWidth="600.0"/>
       <Button layoutX="166.0" layoutY="142.0" mnemonicParsing="false" onAction="#generateCustomerDivisionReport" prefHeight="25.0" prefWidth="268.0" text="Generate Customer Division Report" />
 
    </children>

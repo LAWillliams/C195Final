@@ -25,8 +25,13 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
+import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class UpdateAppointmentController implements Initializable {
 
@@ -126,64 +131,114 @@ public class UpdateAppointmentController implements Initializable {
      * @throws SQLException If a database access error occurs.
      */
     public void setAppointment(Appointment appointment) throws SQLException {
-        JDBC.openConnection();
+        populateAppointmentFields(appointment);
+        populateComboBoxes(appointment);
+    }
+
+    public void populateAppointmentFields(Appointment appointment) {
         Appointment_ID.setText(String.valueOf(appointment.getAppointmentId()));
         Title.setText(appointment.getTitle());
         Description.setText(appointment.getDescription());
         Location.setText(appointment.getLocation());
-        populateContactComboBox();
-
-        // Select the appropriate contact
-        int selectedContact = getContactIdByName(String.valueOf(Integer.parseInt(appointment.getContactId())));
-        String selectedContactName = String.valueOf(selectedContact);
-        contactComboBox.getSelectionModel().select(selectedContactName);
-
-
         Type.setText(appointment.getType());
 
-        // Convert and set start date and time components
-        LocalDateTime startDateTime = appointment.getStart();
-        startDatePicker.setValue(startDateTime.toLocalDate());
-        startHourComboBox.getSelectionModel().select(startDateTime.getHour());
-        startMinuteComboBox.getSelectionModel().select(startDateTime.getMinute());
+        // Convert UTC time to local time
+        LocalDateTime startDateTimeUTC = appointment.getStart();
+        LocalDateTime startDateTimeLocal = startDateTimeUTC.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+        startDatePicker.setValue(startDateTimeLocal.toLocalDate());
+        startHourComboBox.setValue(startDateTimeLocal.getHour());
+        startMinuteComboBox.setValue(startDateTimeLocal.getMinute());
 
-        // Convert and set end date and time components
-        LocalDateTime endDateTime = appointment.getEnd();
-        endDatePicker.setValue(endDateTime.toLocalDate());
-        endHourComboBox.getSelectionModel().select(endDateTime.getHour());
-        endMinuteComboBox.getSelectionModel().select(endDateTime.getMinute());
+        LocalDateTime endDateTimeUTC = appointment.getEnd();
+        LocalDateTime endDateTimeLocal = endDateTimeUTC.atZone(ZoneOffset.UTC).withZoneSameInstant(ZoneId.systemDefault()).toLocalDateTime();
+        endDatePicker.setValue(endDateTimeLocal.toLocalDate());
+        endHourComboBox.setValue(endDateTimeLocal.getHour());
+        endMinuteComboBox.setValue(endDateTimeLocal.getMinute());
 
-        customerComboBox.getSelectionModel().select(Integer.parseInt(appointment.getCustomerId()));
-        userComboBox.getSelectionModel().select(appointment.getUserId());
+        customerComboBox.setValue(Integer.parseInt(appointment.getCustomerId()));
+        userComboBox.setValue(appointment.getUserId());
+    }
 
+
+    private void populateComboBoxes(Appointment appointment) throws SQLException {
+        populateContactComboBox(appointment);
+        // Populate other combo boxes as needed
     }
 
     /**
      * Populates the contact combo box with contact names retrieved from the database.
      */
-    public void populateContactComboBox() {
-        try {
-            JDBC.openConnection();
-            String sql = "SELECT * FROM contacts";
-            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-            ResultSet rs = ps.executeQuery();
-
-            ObservableList<String> contactList = FXCollections.observableArrayList();
-
-            while (rs.next()) {
-                int contactId = rs.getInt("Contact_ID");
-                String contactName = rs.getString("Contact_Name");
-                Contact contact = new Contact(contactId, contactName);
-                contactList.add(contact.getContactName());
-            }
-
-            contactComboBox.setItems(contactList);
-
-            JDBC.closeConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    private void populateContactComboBox(Appointment appointment) throws SQLException {
+        int selectedContactId = Integer.parseInt(appointment.getContactId());
+        String selectedContactName = getContactNameById(selectedContactId);
+        contactComboBox.getSelectionModel().select(selectedContactName);
     }
+
+    private String getContactNameById(int contactId) throws SQLException {
+        JDBC.openConnection();
+        String sql = "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, contactId);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getString("Contact_Name");
+        }
+        return ""; // Handle not found case
+    }
+
+    public boolean isBusinessHours() {
+        int startHour = startHourComboBox.getSelectionModel().getSelectedItem();
+        int endHour = endHourComboBox.getSelectionModel().getSelectedItem();
+        int startMinute = startMinuteComboBox.getSelectionModel().getSelectedItem();
+        int endMinute = endMinuteComboBox.getSelectionModel().getSelectedItem();
+
+        LocalTime openingTimeET = LocalTime.of(8, 0);
+        LocalTime closingTimeET = LocalTime.of(22, 0);
+
+        ZoneId zoneId = ZoneId.of("America/New_York");
+
+        ZonedDateTime startDateTimeET = ZonedDateTime.of(LocalDate.now(), LocalTime.of(startHour, startMinute), ZoneId.systemDefault())
+                .withZoneSameInstant(zoneId);
+        ZonedDateTime endDateTimeET = ZonedDateTime.of(LocalDate.now(), LocalTime.of(endHour, endMinute), ZoneId.systemDefault())
+                .withZoneSameInstant(zoneId);
+
+        LocalTime startET = startDateTimeET.toLocalTime();
+        LocalTime endET = endDateTimeET.toLocalTime();
+
+        if (startET.isBefore(openingTimeET) || endET.isAfter(closingTimeET)) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public boolean isOverlappingAppointment(int appointmentId) throws SQLException {
+        int selectedCustomerId = customerComboBox.getSelectionModel().getSelectedItem();
+        LocalDate startDate = startDatePicker.getValue();
+        int startHour = startHourComboBox.getSelectionModel().getSelectedItem();
+        int startMinute = startMinuteComboBox.getSelectionModel().getSelectedItem();
+        LocalDateTime newStartTime = LocalDateTime.of(startDate, LocalTime.of(startHour, startMinute));
+        LocalDate endDate = endDatePicker.getValue();
+        int endHour = endHourComboBox.getSelectionModel().getSelectedItem();
+        int endMinute = endMinuteComboBox.getSelectionModel().getSelectedItem();
+        LocalDateTime newEndTime = LocalDateTime.of(endDate, LocalTime.of(endHour, endMinute));
+
+        String sql = "SELECT * FROM appointments WHERE Customer_ID = ? AND Appointment_ID != ? " +
+                "AND ((Start <= ? AND End >= ?) OR (Start <= ? AND End >= ?))";
+
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, selectedCustomerId);
+        ps.setInt(2, appointmentId);
+        ps.setTimestamp(3, Timestamp.valueOf(newEndTime));
+        ps.setTimestamp(4, Timestamp.valueOf(newStartTime));
+        ps.setTimestamp(5, Timestamp.valueOf(newEndTime));
+        ps.setTimestamp(6, Timestamp.valueOf(newStartTime));
+
+        ResultSet rs = ps.executeQuery();
+        return rs.next(); // Returns true if overlapping appointment found
+    }
+
 
     /**
      * Handles the save action for updating an appointment.
@@ -194,7 +249,21 @@ public class UpdateAppointmentController implements Initializable {
      * @throws IOException If an I/O error occurs.
      */
     public int appointmentUpdateSaveAction(ActionEvent event) throws SQLException, IOException {
+        if (!isBusinessHours()) {
+            showErrorAlert("Appointments must be scheduled during business hours (8 AM - 10 PM).");
+            return 0; // Indicate that the operation failed
+        }
+
+        int appointmentId = Integer.parseInt(Appointment_ID.getText());
+
+        // Check if there's an overlapping appointment (excluding the current appointment)
+        if (isOverlappingAppointment(appointmentId)) {
+            showErrorAlert("There is an overlapping appointment for the selected customer.");
+            return 0; // Indicate that the operation failed
+        }
+
         JDBC.openConnection();
+
         String sql = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Customer_ID = ?, Contact_ID = ?, User_ID = ? WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
 
@@ -214,8 +283,18 @@ public class UpdateAppointmentController implements Initializable {
         ps.setString(2, Description.getText());
         ps.setString(3, Location.getText());
         ps.setString(4, Type.getText());
-        ps.setString(5, startDatePicker.getValue() + " " + startHourComboBox.getValue() + ":" + startMinuteComboBox.getValue() + ":00");
-        ps.setString(6, endDatePicker.getValue() + " " + endHourComboBox.getValue() + ":" + endMinuteComboBox.getValue() + ":00");
+
+        // Convert local start and end times to UTC Instant
+        Instant startInstant = LocalDateTime.of(startDatePicker.getValue(),
+                LocalTime.of(startHourComboBox.getValue(), startMinuteComboBox.getValue()))
+                .atZone(ZoneId.systemDefault()).toInstant();
+        Instant endInstant = LocalDateTime.of(endDatePicker.getValue(),
+                LocalTime.of(endHourComboBox.getValue(), endMinuteComboBox.getValue()))
+                .atZone(ZoneId.systemDefault()).toInstant();
+
+        // Set UTC times in the prepared statement
+        ps.setTimestamp(5, Timestamp.from(startInstant));
+        ps.setTimestamp(6, Timestamp.from(endInstant));
 
         int rowsAffected = ps.executeUpdate();
 
@@ -225,11 +304,80 @@ public class UpdateAppointmentController implements Initializable {
         } else {
             showErrorAlert("Failed to update appointment data.");
         }
+
         return rowsAffected;
     }
 
+
+    public void populateTimeComboBoxes() {
+        List<Integer> hours = IntStream.rangeClosed(0, 23).boxed().collect(Collectors.toList());
+        List<Integer> minutes = IntStream.rangeClosed(0, 59).boxed().collect(Collectors.toList());
+
+        startHourComboBox.setItems(FXCollections.observableArrayList(hours));
+        startMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
+        endHourComboBox.setItems(FXCollections.observableArrayList(hours));
+        endMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
+    }
+
+    public void populateContactComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT Contact_Name FROM contacts";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<String> contactNames = new ArrayList<>();
+            while (rs.next()) {
+                contactNames.add(rs.getString("Contact_Name"));
+            }
+
+            contactComboBox.setItems(FXCollections.observableArrayList(contactNames));
+            JDBC.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void populateCustomerComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT Customer_ID FROM customers";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            List<Integer> customerIds = new ArrayList<>();
+            while (rs.next()) {
+                customerIds.add(rs.getInt("Customer_ID"));
+            }
+
+            customerComboBox.setItems(FXCollections.observableArrayList(customerIds));
+            JDBC.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void populateUserComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT User_ID FROM users";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            List<Integer> userIds = new ArrayList<>();
+            while (rs.next()) {
+                userIds.add(rs.getInt("User_ID"));        }
+            userComboBox.setItems(FXCollections.observableArrayList(userIds));
+            JDBC.closeConnection();    }
+        catch (SQLException e) {
+            e.printStackTrace();    }
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        populateContactComboBox();
+        populateCustomerComboBox();
+        populateUserComboBox();
+        populateTimeComboBoxes();
     }
 }

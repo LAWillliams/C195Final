@@ -7,17 +7,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.*;
 import javafx.scene.control.TableColumn.CellDataFeatures;
-import javafx.scene.control.TableView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
@@ -65,31 +62,76 @@ public class CustomerController implements Initializable {
      * @throws SQLException If a database access error occurs.
      */
     public static int customerDelete(int customerID) throws SQLException {
+        // Check for associated appointments
+        if (checkForAppointments(customerID)) {
+            // Delete associated appointments
+            deleteAppointmentsForCustomer(customerID);
+        }
+
+        // Now, delete the customer
         String sql = "DELETE FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
-        ps.setInt(1,customerID);
+        ps.setInt(1, customerID);
         int rowsAffected = ps.executeUpdate();
         return rowsAffected;
+    }
+
+
+
+    public static void deleteAppointmentsForCustomer(int customerID) throws SQLException {
+        String sql = "DELETE FROM appointments WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerID);
+        ps.executeUpdate();
     }
 
     public void customerDeleteAction(ActionEvent event) throws SQLException {
         String customerID = customerDeleteField.getText();
         int deletedCustomerID = Integer.parseInt(customerID);
 
-        int rowsAffected = customerDelete(deletedCustomerID);
-        if (rowsAffected > 0) {
-            // Remove the deleted customer row from the data list
-            for (ObservableList<String> row : data) {
-                String customerId = row.get(0);
-                if (customerId.equals(customerID)) {
-                    data.remove(row);
-                    break; // Break once the row is removed
-                }
-            }
+        // Check if there are associated appointments
+        boolean hasAppointments = checkForAppointments(deletedCustomerID);
 
-            // Refresh the TableView
-            tableview.refresh();
+        // Show a confirmation alert
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Delete Customer");
+        alert.setHeaderText("Delete Customer and Associated Appointments");
+        if (hasAppointments) {
+            alert.setContentText("Deleting this customer will also delete all associated appointments. Continue?");
+        } else {
+            alert.setContentText("Are you sure you want to delete this customer?");
         }
+
+        // If the user confirms, proceed with deletion
+        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+        if (result == ButtonType.OK) {
+            int rowsAffected = customerDelete(deletedCustomerID);
+            if (rowsAffected > 0) {
+                // Remove the deleted customer row from the data list
+                for (ObservableList<String> row : data) {
+                    String customerId = row.get(0);
+                    if (customerId.equals(customerID)) {
+                        data.remove(row);
+                        break; // Break once the row is removed
+                    }
+                }
+                // Refresh the TableView
+                tableview.refresh();
+            }
+        }
+    }
+
+    // Method to check if there are associated appointments
+    public static boolean checkForAppointments(int customerID) throws SQLException {
+        String sql = "SELECT COUNT(*) FROM appointments WHERE Customer_ID = ?";
+        PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+        ps.setInt(1, customerID);
+        ResultSet resultSet = ps.executeQuery();
+        if (resultSet.next()) {
+            int count = resultSet.getInt(1);
+            return count > 0;
+        }
+        return false;
     }
 
 

@@ -19,6 +19,11 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import javafx.util.Callback;
 
@@ -35,6 +40,8 @@ public class AppointmentViewController implements Initializable {
     public TextField appointmentUpdateField;
 
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
+    private static final ZoneId ET_ZONE = ZoneId.of("America/New_York"); // Eastern Time Zone
+    private static final ZoneOffset UTC_OFFSET = ZoneOffset.UTC;
 
     /**
      * Handles the action when the "Back" button is clicked.
@@ -256,16 +263,27 @@ public class AppointmentViewController implements Initializable {
         buildData();
     }
 
+    public Instant convertToUTC(LocalDateTime localDateTime) {
+        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().atOffset(UTC_OFFSET).toInstant();
+    }
+
+    // Convert UTC time to local time for display
+    public LocalDateTime convertToLocal(Instant utcInstant) {
+        return LocalDateTime.ofInstant(utcInstant, ZoneId.systemDefault());
+    }
+
     public static final String Appointment_Query = "SELECT appointments.Appointment_ID,appointments.Title,appointments.Description,appointments.Location,appointments.Contact_ID,appointments.Type,appointments.Start,appointments.End,appointments.Customer_ID,appointments.User_ID from appointments";
 
     public void buildData() {
         data = FXCollections.observableArrayList();
-
         try {
             JDBC.openConnection();
             Connection connection = JDBC.getConnection();
             PreparedStatement statement = connection.prepareStatement(Appointment_Query);
             ResultSet rs = statement.executeQuery();
+
+            // Clear existing columns before adding new ones
+            tableview.getColumns().clear();
 
             for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
                 final int j = i;
@@ -275,15 +293,21 @@ public class AppointmentViewController implements Initializable {
                         return new SimpleStringProperty(param.getValue().get(j).toString());
                     }
                 });
-
-                tableview.getColumns().addAll(col);
+                tableview.getColumns().add(col);
                 System.out.println("Column [" + i + "] ");
             }
 
             while (rs.next()) {
                 ObservableList<String> row = FXCollections.observableArrayList();
                 for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-                    row.add(rs.getString(i));
+                    // Handle columns that represent times
+                    if ("Start".equals(rs.getMetaData().getColumnName(i)) || "End".equals(rs.getMetaData().getColumnName(i))) {
+                        Instant utcInstant = rs.getTimestamp(i).toInstant();
+                        LocalDateTime localTime = convertToLocal(utcInstant);
+                        row.add(localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    } else {
+                        row.add(rs.getString(i));
+                    }
                 }
                 System.out.println("Row [1] added " + row);
                 data.add(row);
@@ -296,6 +320,7 @@ public class AppointmentViewController implements Initializable {
             System.out.println("Error on Building Data");
         }
     }
+
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
