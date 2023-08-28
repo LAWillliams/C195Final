@@ -11,7 +11,7 @@
       <Button onAction="#reportsBackButtonAction" text="Back" />
       <TableView fx:id="tableview" layoutY="181.0" prefHeight="219.0" prefWidth="615.0" />
       <Button layoutX="166.0" layoutY="142.0" mnemonicParsing="false" onAction="#generateCustomerDivisionReport" prefHeight="25.0" prefWidth="268.0" text="Generate Customer Division Report" />
-      <ComboBox fx:id="contactComboBox" layoutX="165.0" layoutY="49.0" onAction="#generateContactScheduleReport" prefHeight="25.0" prefWidth="268.0" />
+      <ComboBox fx:id="contactComboBox" layoutX="165.0" layoutY="49.0" onAction="#generateContactScheduleReport" prefHeight="25.0" prefWidth="268.0" promptText="Generate Contact Schedule Report" />
 
    </children>
 </AnchorPane>

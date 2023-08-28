@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Final commit" />
+    <list default="true" id="b74a015c-8579-44ec-b134-6c40dfd8489d" name="Changes" comment="Final commit">
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Reports.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/c195final/Reports.fxml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -224,7 +226,14 @@
       <option name="project" value="LOCAL" />
       <updated>1693190482282</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="Final commit">
+      <created>1693191401889</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1693191401889</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -254,7 +263,8 @@
     <MESSAGE value="Corrected connection issue in VM" />
     <MESSAGE value="Updated with CI revisions" />
     <MESSAGE value="Updated language conversion for login page. Tested and verified all functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="Updated language conversion for login page. Tested and verified all functionality" />
+    <MESSAGE value="Final commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="Final commit" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
