@@ -91,7 +91,7 @@ public class LoginController implements Initializable {
         ZonedDateTime currentTimeUtc = ZonedDateTime.now(ZoneOffset.UTC);
         ZonedDateTime fifteenMinutesLaterUtc = currentTimeUtc.plusMinutes(15);
 
-        // Updated SQL query to capture appointments within the next 15 minutes
+        // SQL query to capture appointments within the next 15 minutes
         String upcomingAppointmentsQuery = "SELECT Appointment_ID, Start FROM appointments " +
                 "WHERE User_ID = ? AND Start > ? AND Start <= ?";
 
@@ -102,35 +102,33 @@ public class LoginController implements Initializable {
             statement.setObject(3, fifteenMinutesLaterUtc.toLocalDateTime());
 
             ResultSet resultSet = statement.executeQuery();
+
             if (resultSet.next()) {
                 int appointmentId = resultSet.getInt("Appointment_ID");
                 String start = resultSet.getString("Start");
 
-                // Prepare the alert message
-                String alertMessage = "You have an upcoming appointment!\n" +
-                        "Appointment ID: " + appointmentId + "\n" +
-                        "Date/Time: " + start;
+                // Prepare the localized alert message
+                String alertMessage = String.format(rb.getString("upcomingAppointment.alertMessage"), appointmentId, start);
 
                 // Display an alert with the appointment information
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Upcoming Appointment");
+                alert.setTitle(rb.getString("upcomingAppointment.alertTitle"));
                 alert.setHeaderText(null);
                 alert.setContentText(alertMessage);
                 alert.showAndWait();
             } else {
-                String noAppointmentMessage = "You don't have any upcoming appointments within the next 15 minutes.";
-
-                // Display an alert with the message
+                // Display a localized alert with the message that there are no upcoming appointments
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("No Upcoming Appointments");
+                alert.setTitle(rb.getString("noUpcomingAppointments.alertTitle"));
                 alert.setHeaderText(null);
-                alert.setContentText(noAppointmentMessage);
+                alert.setContentText(rb.getString("noUpcomingAppointments.alertMessage"));
                 alert.showAndWait();
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * @LAMBDA
@@ -144,33 +142,37 @@ public class LoginController implements Initializable {
         // Using a lambda expression to handle the checked exceptions
         handleCheckedExceptions(() -> {
             JDBC.openConnection();
+
             // Store username and password into variables
             String username = usernameField.getText();
             String password = passwordField.getText();
-            // Create an instance of the LoginController (assuming you need it for some specific reason)
-            LoginController userAuthentication = new LoginController();
-            boolean isValid = userAuthentication.isValidCredentials(username, password);
 
-            logLoginActivity(username, isValid); // Log the login attempt
+            // Check if the entered credentials are valid
+            boolean isValid = isValidCredentials(username, password);
+
+            // Log the login attempt
+            logLoginActivity(username, isValid);
 
             if (isValid) {
                 // Check for upcoming appointments within 15 minutes
                 JDBC.openConnection();
                 checkUpcomingAppointments(username);
+
                 // Load the main screen
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
                 Parent parent = loader.load();
                 Scene scene = new Scene(parent);
                 MainScreenController controller = loader.getController();
-                // controller.sendProduct(productTableView.getSelectionModel().getSelectedIndex(),productTableView.getSelectionModel().getSelectedItem());
+
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
             } else {
-                errorLabel.setText("Invalid username or password");
+                errorLabel.setText(rb.getString("errorLabel.text"));
             }
         });
     }
+
 
     private interface CheckedRunnable {
         void run() throws Exception;
@@ -223,24 +225,33 @@ public class LoginController implements Initializable {
      * @param url resolves location for the object(s)
      * */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle)
-    {
-        try
-        {
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        try {
             JDBC.openConnection();
-            Locale locale = Locale.getDefault();
+
+            Locale locale = Locale.getDefault();  // Get the default locale from the system
+            try {
+                // Load the appropriate ResourceBundle based on the user's preferred locale
+                rb = ResourceBundle.getBundle("com.example.c195final.Nat", locale);
+            } catch (MissingResourceException e) {
+                rb = ResourceBundle.getBundle("com.example.c195final.Nat", Locale.ENGLISH);
+            }
+
+            // Set the default locale for your application. Not necessary if you're only using it for this class
             Locale.setDefault(locale);
 
+            // Set your UI elements based on the resource bundle
             ZoneId zone = ZoneId.systemDefault();
-
             location.setText(String.valueOf(zone));
 
+            loginButton.setText(rb.getString("login.button.text"));
+            usernameField.setPromptText(rb.getString("username.field.prompt"));
+            passwordField.setPromptText(rb.getString("password.field.prompt"));
 
-        } catch(MissingResourceException e) {
-            System.out.println("Resource file missing: " + e);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             System.out.println(e);
         }
     }
+
+
 }

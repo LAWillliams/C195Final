@@ -4,9 +4,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.c195final.controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.c195final.controller.LoginController">
    <children>
-      <Label text="Login Page" />
       <PasswordField fx:id="passwordField" layoutX="226.0" layoutY="240.0" promptText="Please Enter Password" />
       <TextField fx:id="usernameField" layoutX="226.0" layoutY="175.0" promptText="Please Enter User Name" />
       <Button fx:id="loginButton" layoutX="277.0" layoutY="315.0" mnemonicParsing="false" onAction="#loginButtonAction" text="Login" />
