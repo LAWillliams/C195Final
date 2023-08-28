@@ -69,7 +69,11 @@ public class UpdateAppointmentController implements Initializable {
     @FXML
     public ComboBox<Integer> userComboBox;
 
-
+    /**
+     * Handles the action when the "Back" button is clicked.
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     @FXML
     public void appointmentUpdateBackButton(ActionEvent event) throws IOException {
 
@@ -160,7 +164,7 @@ public class UpdateAppointmentController implements Initializable {
     }
 
 
-    private void populateComboBoxes(Appointment appointment) throws SQLException {
+    public void populateComboBoxes(Appointment appointment) throws SQLException {
         populateContactComboBox(appointment);
         // Populate other combo boxes as needed
     }
@@ -168,13 +172,20 @@ public class UpdateAppointmentController implements Initializable {
     /**
      * Populates the contact combo box with contact names retrieved from the database.
      */
-    private void populateContactComboBox(Appointment appointment) throws SQLException {
+    public void populateContactComboBox(Appointment appointment) throws SQLException {
         int selectedContactId = Integer.parseInt(appointment.getContactId());
         String selectedContactName = getContactNameById(selectedContactId);
         contactComboBox.getSelectionModel().select(selectedContactName);
     }
 
-    private String getContactNameById(int contactId) throws SQLException {
+    /**
+     * Retrieves the contact name based on the provided contact ID.
+     *
+     * @param contactId The ID of the contact to find the name for.
+     * @return The contact name associated with the ID, or an empty string if not found.
+     * @throws SQLException If a database access error occurs.
+     */
+    public String getContactNameById(int contactId) throws SQLException {
         JDBC.openConnection();
         String sql = "SELECT Contact_Name FROM contacts WHERE Contact_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -186,6 +197,11 @@ public class UpdateAppointmentController implements Initializable {
         return ""; // Handle not found case
     }
 
+    /**
+     * Checks if the selected appointment's time falls within business hours.
+     *
+     * @return True if the appointment time is within business hours (8 AM - 10 PM), false otherwise.
+     */
     public boolean isBusinessHours() {
         int startHour = startHourComboBox.getSelectionModel().getSelectedItem();
         int endHour = endHourComboBox.getSelectionModel().getSelectedItem();
@@ -212,7 +228,12 @@ public class UpdateAppointmentController implements Initializable {
         return true;
     }
 
-
+    /**
+     * Checks if there is an overlapping appointment for the selected customer.
+     * @param appointmentId The ID of the appointment to exclude from the check.
+     * @return true if overlapping appointment found, false otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     public boolean isOverlappingAppointment(int appointmentId) throws SQLException {
         int selectedCustomerId = customerComboBox.getSelectionModel().getSelectedItem();
         LocalDate startDate = startDatePicker.getValue();
@@ -308,7 +329,10 @@ public class UpdateAppointmentController implements Initializable {
         return rowsAffected;
     }
 
-
+    /**
+     * Populates the time combo boxes with hours and minutes.
+     * Hours range from 0 to 23, and minutes range from 0 to 59.
+     */
     public void populateTimeComboBoxes() {
         List<Integer> hours = IntStream.rangeClosed(0, 23).boxed().collect(Collectors.toList());
         List<Integer> minutes = IntStream.rangeClosed(0, 59).boxed().collect(Collectors.toList());
@@ -319,6 +343,9 @@ public class UpdateAppointmentController implements Initializable {
         endMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
     }
 
+    /**
+     * Populates the contact combo box with contact names retrieved from the database.
+     */
     public void populateContactComboBox() {
         try {
             JDBC.openConnection();
@@ -338,6 +365,9 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Populates the customer combo box with customer IDs retrieved from the database.
+     */
     public void populateCustomerComboBox() {
         try {
             JDBC.openConnection();
@@ -357,6 +387,9 @@ public class UpdateAppointmentController implements Initializable {
         }
     }
 
+    /**
+     * Populates the user combo box with user IDs retrieved from the database.
+     */
     public void populateUserComboBox() {
         try {
             JDBC.openConnection();
@@ -372,7 +405,12 @@ public class UpdateAppointmentController implements Initializable {
             e.printStackTrace();    }
     }
 
-
+    /**
+     * Initializes the class with necessary resources and UI elements.
+     * This method is called automatically when the FXML file is loaded.
+     * @param url The URL for the object(s).
+     * @param resourceBundle The resource bundle to be used for localization.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populateContactComboBox();

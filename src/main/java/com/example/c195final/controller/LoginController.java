@@ -65,6 +65,11 @@ public class LoginController implements Initializable {
         return false;
     }
 
+    /**
+     * Retrieves the user ID associated with a given username.
+     * @param username The username for which to retrieve the user ID.
+     * @return The user ID associated with the username, or -1 if not found.
+     */
     public int getUserIdByUsername(String username) {
         JDBC.openConnection();
         String getUserIdQuery = "SELECT User_ID FROM users WHERE User_Name = ?";
@@ -86,6 +91,11 @@ public class LoginController implements Initializable {
         return -1;
     }
 
+    /**
+     * Checks for upcoming appointments within the next 15 minutes for the given user.
+     * Displays an alert if there are upcoming appointments, or a message if there are none.
+     * @param username The username of the user for whom to check appointments.
+     */
     public void checkUpcomingAppointments(String username) {
         // Get the current time in UTC
         ZonedDateTime currentTimeUtc = ZonedDateTime.now(ZoneOffset.UTC);
@@ -174,11 +184,15 @@ public class LoginController implements Initializable {
     }
 
 
-    private interface CheckedRunnable {
+    public interface CheckedRunnable {
         void run() throws Exception;
     }
 
-    private void handleCheckedExceptions(CheckedRunnable runnable) {
+    /**
+     * Handles checked exceptions using a lambda expression.
+     * @param runnable The runnable code block that might throw exceptions.
+     */
+    public void handleCheckedExceptions(CheckedRunnable runnable) {
         try {
             runnable.run();
         } catch (Exception e) {

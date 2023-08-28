@@ -79,6 +79,15 @@ public class CustomerCreateController implements Initializable {
         alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE); // Set minimum height to display full error message
         alert.showAndWait();
     }
+
+    /**
+     * Handles the action to save customer information.
+     *
+     * @param event The event triggering the action.
+     * @return The number of rows affected by the insertion operation.
+     * @throws SQLException If a database access error occurs.
+     * @throws IOException If an I/O error occurs.
+     */
     public int customerSaveAction(ActionEvent event) throws SQLException, IOException {
         JDBC.openConnection();
         String sql = "INSERT INTO customers (Customer_Name,Address,Postal_Code,Phone,Division_ID)VALUES(?,?,?,?,?)";

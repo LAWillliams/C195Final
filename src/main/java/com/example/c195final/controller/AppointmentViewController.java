@@ -74,6 +74,12 @@ public class AppointmentViewController implements Initializable {
         return rowsAffected;
     }
 
+    /**
+     * Handles the action when the "Delete" button is clicked to delete an appointment.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws SQLException If a database access error occurs.
+     */
     @FXML
     public void appointmentDeleteButton(ActionEvent event) throws SQLException {
         // Get the selected row from the TableView
@@ -95,7 +101,12 @@ public class AppointmentViewController implements Initializable {
         }
     }
 
-
+    /**
+     * Handles the action when the "Add" button is clicked to add a new appointment.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     */
     public void appointmentAddButton(ActionEvent event) throws IOException {
 
         FXMLLoader loader = new FXMLLoader();
@@ -108,6 +119,13 @@ public class AppointmentViewController implements Initializable {
         stage.show();
     }
 
+    /**
+     * Retrieves an Appointment object by its ID from the database.
+     *
+     * @param appointmentID The ID of the appointment to retrieve.
+     * @return The retrieved Appointment object, or null if not found.
+     * @throws SQLException If a database access error occurs.
+     */
     public static Appointment getAppointmentByID(int appointmentID) throws SQLException {
         String sql = "SELECT * FROM appointments WHERE Appointment_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -136,6 +154,13 @@ public class AppointmentViewController implements Initializable {
         return null;
     }
 
+    /**
+     * Handles the action when the "Update" button is clicked to edit an appointment.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws SQLException If a database access error occurs.
+     * @throws IOException  If an I/O exception occurs.
+     */
     @FXML
     public void appointmentUpdateButton(ActionEvent event) throws SQLException, IOException {
         ObservableList<String> selectedRow = (ObservableList<String>) tableview.getSelectionModel().getSelectedItem();
@@ -167,7 +192,11 @@ public class AppointmentViewController implements Initializable {
 
     public static final String AppointmentQueryByMonth = "SELECT appointments.Appointment_ID,appointments.Title,appointments.Description,appointments.Location,appointments.Contact_ID,appointments.Type,appointments.Start,appointments.End,appointments.Customer_ID,appointments.User_ID FROM appointments WHERE YEAR(appointments.Start) = YEAR(CURRENT_DATE) AND MONTH(appointments.Start) = MONTH(CURRENT_DATE)";
 
-
+    /**
+     * Queries the database to populate the TableView with appointments sorted by month.
+     *
+     * @param event The ActionEvent triggered by the radio button selection.
+     */
     @FXML
     public void sortByMonthRadioButton(ActionEvent event) {
         data = FXCollections.observableArrayList();
@@ -210,7 +239,11 @@ public class AppointmentViewController implements Initializable {
 
     public static final String AppointmentQueryByWeek = "SELECT appointments.Appointment_ID,appointments.Title,appointments.Description,appointments.Location,appointments.Contact_ID,appointments.Type,appointments.Start,appointments.End,appointments.Customer_ID,appointments.User_ID FROM appointments WHERE YEAR(appointments.Start) = YEAR(CURRENT_DATE) AND MONTH(appointments.Start) = MONTH(CURRENT_DATE) AND WEEK(appointments.Start) = WEEK(CURRENT_DATE)";
 
-
+    /**
+     * Queries the database to populate the TableView with appointments sorted by week.
+     *
+     * @param event The ActionEvent triggered by the radio button selection.
+     */
     @FXML
     public void sortByWeekRadioButton(ActionEvent event) {
         data = FXCollections.observableArrayList();
@@ -251,15 +284,17 @@ public class AppointmentViewController implements Initializable {
         }
     }
 
+    /**
+     * Sorts and displays all appointments in the TableView.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     */
     @FXML
     public void sortAllButton(ActionEvent event){
 
         buildData();
     }
 
-    public Instant convertToUTC(LocalDateTime localDateTime) {
-        return localDateTime.atZone(ZoneId.systemDefault()).toInstant().atOffset(UTC_OFFSET).toInstant();
-    }
 
     // Convert UTC time to local time for display
     public LocalDateTime convertToLocal(Instant utcInstant) {

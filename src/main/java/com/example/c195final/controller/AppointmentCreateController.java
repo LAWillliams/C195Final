@@ -78,6 +78,10 @@ public class AppointmentCreateController implements Initializable {
 
     }
 
+    /**
+     * Displays a success alert when an operation is successful.
+     * Shows an information alert indicating that the appointment data has been saved successfully.
+     */
     public void showSuccessAlert() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Success");
@@ -86,6 +90,11 @@ public class AppointmentCreateController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Displays an error alert when an error occurs.
+     * Shows an error alert indicating that an error occurred while performing an operation.
+     * @param errorMessage The error message to be displayed in the alert.
+     */
     public void showErrorAlert(String errorMessage) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -95,6 +104,10 @@ public class AppointmentCreateController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Checks if the selected appointment's start and end times are within business hours (8:00 AM - 10:00 PM ET).
+     * @return True if the appointment is within business hours, false otherwise.
+     */
     public boolean isBusinessHours() {
         int startHour = startHourComboBox.getSelectionModel().getSelectedItem();
         int endHour = endHourComboBox.getSelectionModel().getSelectedItem();
@@ -121,7 +134,12 @@ public class AppointmentCreateController implements Initializable {
         return true;
     }
 
-
+    /**
+     * Checks if there is an overlapping appointment for the selected customer within the specified time range.
+     * Compares the new appointment's start and end times with existing appointments for the selected customer.
+     * @return True if an overlapping appointment is found, false otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     public boolean isOverlappingAppointment() throws SQLException {
         int selectedCustomerId = customerComboBox.getSelectionModel().getSelectedItem();
         LocalDate startDate = startDatePicker.getValue();
@@ -147,8 +165,12 @@ public class AppointmentCreateController implements Initializable {
         return rs.next(); // Returns true if overlapping appointment found
     }
 
-
-
+    /**
+     * Retrieves the Contact ID by the given contact name from the "contacts" table.
+     * @param contactName The name of the contact.
+     * @return The Contact ID if found, or a default value (-1) if not found.
+     * @throws SQLException If a database access error occurs.
+     */
     public int getContactIdByName(String contactName) throws SQLException {
         String sql = "SELECT Contact_ID FROM contacts WHERE Contact_Name = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -164,7 +186,14 @@ public class AppointmentCreateController implements Initializable {
         return -1;
     }
 
-
+    /**
+     * Handles the action when the "Save" button is clicked to create a new appointment.
+     * Validates input, checks business hours, checks for overlapping appointments, and performs the insertion.
+     * @param event The ActionEvent triggered by the button click.
+     * @return The number of rows affected (1 if successful, 0 if failed).
+     * @throws SQLException If a database access error occurs.
+     * @throws IOException If an I/O exception occurs.
+     */
     public int appointmentSaveAction(ActionEvent event) throws SQLException, IOException {
         JDBC.openConnection();
         try {
@@ -231,7 +260,10 @@ public class AppointmentCreateController implements Initializable {
         }
     }
 
-
+    /**
+     * Populates the startHourComboBox, startMinuteComboBox, endHourComboBox, and endMinuteComboBox with time values.
+     * Initializes ComboBoxes with lists of hours (0 to 23) and minutes (0 to 59).
+     */
     public void populateTimeComboBoxes() {
         List<Integer> hours = IntStream.rangeClosed(0, 23).boxed().collect(Collectors.toList());
         List<Integer> minutes = IntStream.rangeClosed(0, 59).boxed().collect(Collectors.toList());
@@ -242,6 +274,10 @@ public class AppointmentCreateController implements Initializable {
         endMinuteComboBox.setItems(FXCollections.observableArrayList(minutes));
     }
 
+    /**
+     * Populates the contactComboBox with contact names from the database.
+     * Retrieves contact names from the "contacts" table and adds them to the ComboBox.
+     */
     public void populateContactComboBox() {
         try {
             JDBC.openConnection();
@@ -261,6 +297,10 @@ public class AppointmentCreateController implements Initializable {
         }
     }
 
+    /**
+     * Populates the customerComboBox with customer IDs from the database.
+     * Retrieves customer IDs from the "customers" table and adds them to the ComboBox.
+     */
     public void populateCustomerComboBox() {
         try {
             JDBC.openConnection();
@@ -280,6 +320,10 @@ public class AppointmentCreateController implements Initializable {
         }
     }
 
+    /**
+     * Populates the userComboBox with user IDs from the database.
+     * Retrieves user IDs from the "users" table and adds them to the ComboBox.
+     */
     public void populateUserComboBox() {
         try {
             JDBC.openConnection();

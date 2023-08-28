@@ -76,8 +76,12 @@ public class CustomerController implements Initializable {
         return rowsAffected;
     }
 
-
-
+    /**
+     * Deletes all appointments associated with a given customer.
+     *
+     * @param customerID The ID of the customer whose appointments need to be deleted.
+     * @throws SQLException If a database access error occurs.
+     */
     public static void deleteAppointmentsForCustomer(int customerID) throws SQLException {
         String sql = "DELETE FROM appointments WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -85,6 +89,12 @@ public class CustomerController implements Initializable {
         ps.executeUpdate();
     }
 
+    /**
+     * Handles the action to delete a customer and their associated appointments.
+     *
+     * @param event The event triggering the action.
+     * @throws SQLException If a database access error occurs.
+     */
     public void customerDeleteAction(ActionEvent event) throws SQLException {
         ObservableList<String> selectedRow = (ObservableList<String>) tableview.getSelectionModel().getSelectedItem();
 
@@ -125,7 +135,13 @@ public class CustomerController implements Initializable {
 
 
 
-    // Method to check if there are associated appointments
+    /**
+     * Checks if there are any appointments associated with a customer.
+     *
+     * @param customerID The ID of the customer to check for appointments.
+     * @return True if there are appointments associated with the customer, false otherwise.
+     * @throws SQLException If a database access error occurs.
+     */
     public static boolean checkForAppointments(int customerID) throws SQLException {
         String sql = "SELECT COUNT(*) FROM appointments WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);
@@ -138,8 +154,13 @@ public class CustomerController implements Initializable {
         return false;
     }
 
-
-
+    /**
+     * Retrieves customer information by their ID.
+     *
+     * @param customerID The ID of the customer to retrieve.
+     * @return A Customer object containing the retrieved customer information, or null if not found.
+     * @throws SQLException If a database access error occurs.
+     */
     public static Customer getCustomerByID(int customerID) throws SQLException {
         String sql = "SELECT * FROM customers WHERE Customer_ID = ?";
         PreparedStatement ps = JDBC.connection.prepareStatement(sql);

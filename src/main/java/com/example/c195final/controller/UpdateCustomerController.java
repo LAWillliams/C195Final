@@ -70,7 +70,13 @@ public class UpdateCustomerController implements Initializable {
         alert.showAndWait();
     }
 
-    private String fetchDivisionNameById(int divisionId) {
+    /**
+     * Retrieves the division name based on the provided division ID.
+     *
+     * @param divisionId The ID of the division to find the name for.
+     * @return The division name associated with the ID, or an empty string if not found.
+     */
+    public String fetchDivisionNameById(int divisionId) {
         String divisionName = ""; // Default value
         try {
             JDBC.openConnection();
@@ -143,7 +149,12 @@ public class UpdateCustomerController implements Initializable {
 
     }
 
-
+    /**
+     * Fetches and sets the country in the UI based on the provided division ID.
+     *
+     * @param divisionId The ID of the division to fetch the associated country for.
+     * @return The name of the country associated with the division.
+     */
     public String fetchCountryByDivision(int divisionId) {
         String country = ""; // Default value
         try {
@@ -163,6 +174,13 @@ public class UpdateCustomerController implements Initializable {
         return country;
     }
 
+    /**
+     * Retrieves the country ID associated with the provided division ID.
+     *
+     * @param divisionId The ID of the division to find the associated country ID for.
+     * @return The country ID associated with the division, or -1 if not found.
+     * @throws SQLException If a database access error occurs.
+     */
     public int getCountryIdByDivision(int divisionId) throws SQLException {
         int countryId = -1; // Default value if not found or error occurs
 
@@ -220,7 +238,14 @@ public class UpdateCustomerController implements Initializable {
         return rowsAffected;
     }
 
-    private int getCountryIdByName(String countryName) throws SQLException {
+    /**
+     * Retrieves the country ID based on the provided country name.
+     *
+     * @param countryName The name of the country to find the ID for.
+     * @return The country ID, or -1 if not found.
+     * @throws SQLException If a database access error occurs.
+     */
+    public int getCountryIdByName(String countryName) throws SQLException {
         int countryId = -1; // Default value if not found or error occurs
 
         try {

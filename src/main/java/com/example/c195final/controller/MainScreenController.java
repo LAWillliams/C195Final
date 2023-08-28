@@ -47,18 +47,36 @@ public class MainScreenController implements Initializable {
         };
     }
 
+    /**
+     * Handles the action of clicking the "Appointments" button in the main menu.
+     * Loads the appointment view screen.
+     *
+     * @param event The ActionEvent triggered by clicking the "Appointments" button.
+     */
     @FXML
     public void mainMenuAppointmentAction(ActionEvent event) {
         ScreenLoader loader = createScreenLoader("/com/example/c195final/AppointmentView.fxml");
         loader.load(event, "/com/example/c195final/AppointmentView.fxml");
     }
 
+    /**
+     * Handles the action of clicking the "Customers" button in the main menu.
+     * Loads the customer view screen.
+     *
+     * @param event The ActionEvent triggered by clicking the "Customers" button.
+     */
     @FXML
     public void mainMenuCustomerAction(ActionEvent event) {
         ScreenLoader loader = createScreenLoader("/com/example/c195final/Customer.fxml");
         loader.load(event, "/com/example/c195final/Customer.fxml");
     }
 
+    /**
+     * Handles the action of clicking the "Reports" button in the main menu.
+     * Loads the reports view screen.
+     *
+     * @param event The ActionEvent triggered by clicking the "Reports" button.
+     */
     @FXML
     public void mainMenuReportAction(ActionEvent event) {
         ScreenLoader loader = createScreenLoader("/com/example/c195final/Reports.fxml");

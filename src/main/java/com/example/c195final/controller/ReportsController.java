@@ -192,8 +192,12 @@ public class ReportsController implements Initializable {
         tableview.setItems(data);
     }
 
-
-
+    /**
+     * Initializes the class with necessary resources and UI elements.
+     * This method is called automatically when the FXML file is loaded.
+     * @param url The URL for the object(s).
+     * @param resourceBundle The resource bundle to be used for localization.
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         populateContactComboBox();
     }
