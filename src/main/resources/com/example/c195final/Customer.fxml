@@ -10,7 +10,5 @@
       <Button layoutX="41.0" layoutY="40.0" mnemonicParsing="false" onAction="#customerDeleteAction" prefHeight="55.0" prefWidth="118.0" text="Delete" />
       <Button layoutX="447.0" layoutY="40.0" mnemonicParsing="false" onAction="#customerAddAction" prefHeight="55.0" prefWidth="118.0" text="Add" />
       <Button layoutX="868.0" layoutY="40.0" mnemonicParsing="false" onAction="#customerUpdateAction" prefHeight="55.0" prefWidth="118.0" text="Update" />
-      <TextField fx:id="customerDeleteField" layoutX="41.0" layoutY="95.0" prefHeight="25.0" prefWidth="118.0" promptText="Enter customer ID to delete" />
-      <TextField fx:id="customerUpdateField" layoutX="868.0" layoutY="95.0" prefHeight="25.0" prefWidth="118.0" promptText="Enter Customer ID to Update" />
    </children>
 </AnchorPane>

@@ -74,26 +74,27 @@ public class AppointmentViewController implements Initializable {
         return rowsAffected;
     }
 
+    @FXML
     public void appointmentDeleteButton(ActionEvent event) throws SQLException {
-        JDBC.openConnection();
-        String appointmentID = appointmentDeleteField.getText();
-        int deletedAppointmentID = Integer.parseInt(appointmentID);
+        // Get the selected row from the TableView
+        ObservableList<String> selectedRow = (ObservableList<String>) tableview.getSelectionModel().getSelectedItem();
 
-        int rowsAffected = appointmentDelete(deletedAppointmentID);
-        if (rowsAffected > 0) {
-            // Remove the deleted customer row from the data list
-            for (ObservableList<String> row : data) {
-                String appointmentId = row.get(0); // Assuming Customer_ID is the first column
-                if (appointmentId.equals(appointmentID)) {
-                    data.remove(row);
-                    break; // Break once the row is removed
-                }
+        if (selectedRow != null) {
+            String appointmentId = selectedRow.get(0); // Assuming Appointment_ID is the first column
+            int deletedAppointmentID = Integer.parseInt(appointmentId);
+
+            int rowsAffected = appointmentDelete(deletedAppointmentID);
+
+            if (rowsAffected > 0) {
+                // Remove the selected row from the data list
+                data.remove(selectedRow);
+
+                // Refresh the TableView
+                tableview.refresh();
             }
-
-            // Refresh the TableView
-            tableview.refresh();
         }
     }
+
 
     public void appointmentAddButton(ActionEvent event) throws IOException {
 
@@ -135,39 +136,32 @@ public class AppointmentViewController implements Initializable {
         return null;
     }
 
+    @FXML
     public void appointmentUpdateButton(ActionEvent event) throws SQLException, IOException {
+        ObservableList<String> selectedRow = (ObservableList<String>) tableview.getSelectionModel().getSelectedItem();
 
-        JDBC.openConnection();
-        String appointmentID = appointmentUpdateField.getText().trim(); // Trim to remove leading/trailing spaces
-
-        // Check if the customerID is not empty or null
-        if (!appointmentID.isEmpty()) {
+        if (selectedRow != null) {
+            String appointmentID = selectedRow.get(0); // Assuming Appointment_ID is the first column
             int appointmentIdInt = Integer.parseInt(appointmentID);
-
-            // Retrieve the customer record using the provided customerID
+            JDBC.openConnection();
             Appointment appointment = getAppointmentByID(appointmentIdInt);
 
             if (appointment != null) {
-                // Load the new FXML screen
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/com/example/c195final/UpdateAppointment.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/c195final/UpdateAppointment.fxml"));
                 Parent parent = loader.load();
                 Scene scene = new Scene(parent);
 
-                // Pass the retrieved customer information to the controller of the new FXML screen
                 UpdateAppointmentController controller = loader.getController();
-                controller.setAppointment(appointment); // Assuming you have a setter in UpdateCustomerController
+                controller.setAppointment(appointment);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
             } else {
-                // Handle the case when no customer record is found with the provided ID
-                // Display an error message or take appropriate action
+                // Handle no appointment record found
             }
         } else {
-            // Handle the case when the customerID field is empty or null
-            // Display an error message or take appropriate action
+            // Handle no row selected
         }
     }
 

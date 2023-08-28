@@ -1,6 +1,10 @@
 package com.example.c195final.controller;
 
 import com.example.c195final.helper.JDBC;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,21 +12,31 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.Callback;
+
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class ReportsController implements Initializable {
 
+
     @FXML
-    public TextArea reportTextArea;
+    private ComboBox<String> contactComboBox;
+
+    @FXML
+    private TableView<ObservableList<String>> tableview;
+
 
     /**
      * Handles the action when the "Back" button is clicked.
@@ -58,21 +72,27 @@ public class ReportsController implements Initializable {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            // Create a StringBuilder to accumulate the report text
-            StringBuilder reportText = new StringBuilder();
+            buildData(rs); // Utilize the buildData method to populate the TableView
 
-            // Process the result set and accumulate the report text
+            JDBC.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void populateContactComboBox() {
+        try {
+            JDBC.openConnection();
+            String sql = "SELECT Contact_Name FROM contacts";
+            PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            ObservableList<String> contactNames = FXCollections.observableArrayList();
             while (rs.next()) {
-                int month = rs.getInt("Month");
-                String type = rs.getString("Type");
-                int count = rs.getInt("Count");
-
-                // Append the data to the reportText
-                reportText.append("Month: ").append(month).append(", Type: ").append(type).append(", Count: ").append(count).append("\n");
+                contactNames.add(rs.getString("Contact_Name"));
             }
 
-            // Display the report text in the TextArea
-            reportTextArea.setText(reportText.toString());
+            contactComboBox.setItems(contactNames);
 
             JDBC.closeConnection();
         } catch (SQLException e) {
@@ -87,46 +107,30 @@ public class ReportsController implements Initializable {
      */
     @FXML
     public void generateContactScheduleReport(ActionEvent event) {
+        String selectedContact = contactComboBox.getValue();
+        if (selectedContact == null || selectedContact.isEmpty()) {
+            // Handle no contact selected
+            return;
+        }
+
         try {
             JDBC.openConnection();
-            String sql = "SELECT c.Contact_Name, a.Appointment_ID, a.Title, a.Type, a.Description, a.Start, a.End, a.Customer_ID " +
+            String sql = "SELECT a.Appointment_ID, a.Title, a.Type, a.Description, a.Start, a.End, a.Customer_ID " +
                     "FROM appointments a " +
-                    "JOIN contacts c ON a.Contact_ID = c.Contact_ID";
+                    "JOIN contacts c ON a.Contact_ID = c.Contact_ID " +
+                    "WHERE c.Contact_Name = ?";
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
+            ps.setString(1, selectedContact);
             ResultSet rs = ps.executeQuery();
 
-            // Create a StringBuilder to accumulate the report text
-            StringBuilder reportText = new StringBuilder();
-
-            // Process the result set and accumulate the report text
-            while (rs.next()) {
-                String contactName = rs.getString("Contact_Name");
-                int appointmentId = rs.getInt("Appointment_ID");
-                String title = rs.getString("Title");
-                String type = rs.getString("Type");
-                String description = rs.getString("Description");
-                LocalDateTime start = rs.getTimestamp("Start").toLocalDateTime();
-                LocalDateTime end = rs.getTimestamp("End").toLocalDateTime();
-                int customerId = rs.getInt("Customer_ID");
-
-                // Append the data to the reportText
-                reportText.append("Contact: ").append(contactName).append(", Appointment ID: ").append(appointmentId)
-                        .append(", Title: ").append(title).append(", Type: ").append(type)
-                        .append(", Description: ").append(description)
-                        .append(", Start: ").append(start).append(", End: ").append(end)
-                        .append(", Customer ID: ").append(customerId).append("\n");
-
-                // Add other data fields as needed...
-            }
-
-            // Display the report text in the TextArea
-            reportTextArea.setText(reportText.toString());
+            buildData(rs); // Utilize the buildData method to populate the TableView
 
             JDBC.closeConnection();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
 
     /**
      * Generates a report of customer divisions.
@@ -142,20 +146,7 @@ public class ReportsController implements Initializable {
             PreparedStatement ps = JDBC.connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
 
-            // Create a StringBuilder to accumulate the report text
-            StringBuilder reportText = new StringBuilder();
-
-            // Process the result set and accumulate the report text
-            while (rs.next()) {
-                String customerName = rs.getString("Customer_Name");
-                String division = rs.getString("Division");
-
-                // Append the data to the reportText
-                reportText.append("Customer: ").append(customerName).append(", Division: ").append(division).append("\n");
-            }
-
-            // Display the report text in the TextArea
-            reportTextArea.setText(reportText.toString());
+            buildData(rs); // Utilize the buildData method to populate the TableView
 
             JDBC.closeConnection();
         } catch (SQLException e) {
@@ -163,8 +154,47 @@ public class ReportsController implements Initializable {
         }
     }
 
+    public LocalDateTime convertToLocal(Instant instant) {
+        ZoneId zoneId = ZoneId.systemDefault();
+        return instant.atZone(zoneId).toLocalDateTime();
+    }
+
+    public void buildData(ResultSet rs) throws SQLException {
+        ObservableList<ObservableList<String>> data = FXCollections.observableArrayList();
+
+        // Clear existing columns before adding new ones
+        tableview.getColumns().clear();
+
+        for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
+            final int j = i;
+            TableColumn<ObservableList<String>, String> col = new TableColumn<>(rs.getMetaData().getColumnName(i + 1));
+            col.setCellValueFactory(param -> new SimpleStringProperty(param.getValue().get(j)));
+            tableview.getColumns().add(col);
+            System.out.println("Column [" + i + "]");
+        }
+
+        while (rs.next()) {
+            ObservableList<String> row = FXCollections.observableArrayList();
+            for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
+                // Handle columns that represent times
+                if ("Start".equals(rs.getMetaData().getColumnName(i)) || "End".equals(rs.getMetaData().getColumnName(i))) {
+                    Instant utcInstant = rs.getTimestamp(i).toInstant();
+                    LocalDateTime localTime = convertToLocal(utcInstant);
+                    row.add(localTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                } else {
+                    row.add(rs.getString(i));
+                }
+            }
+            System.out.println("Row added " + row);
+            data.add(row);
+        }
+
+        tableview.setItems(data);
+    }
+
 
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        populateContactComboBox();
     }
 }

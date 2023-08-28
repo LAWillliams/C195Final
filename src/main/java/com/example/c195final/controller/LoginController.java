@@ -8,11 +8,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -21,6 +21,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.MissingResourceException;
@@ -29,8 +31,6 @@ import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
-;
 
 /**
  * @author lukea
@@ -65,50 +65,8 @@ public class LoginController implements Initializable {
         return false;
     }
 
-    public void checkUpcomingAppointments(String username) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        LocalDateTime fifteenMinutesLater = currentTime.plusMinutes(15);
-
-        // Query the database for upcoming appointments
-        String upcomingAppointmentsQuery = "SELECT Appointment_ID, Start" +
-                "FROM appointments " +
-                "WHERE User_ID = ? AND Start <= ?";
-
-        try (Connection connection = JDBC.getConnection();
-             PreparedStatement statement = connection.prepareStatement(upcomingAppointmentsQuery)) {
-            statement.setInt(1, getUserIdByUsername(username));
-            statement.setObject(2, fifteenMinutesLater);
-            statement.setObject(3, currentTime);
-
-            ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()) {
-                // There are upcoming appointments
-                int appointmentId = resultSet.getInt("Appointment_ID");
-                String start = resultSet.getString("Start");
-
-                String alertMessage = "You have an upcoming appointment!\n" +
-                        "Appointment ID: " + appointmentId + "\n" +
-                        "Start: " + start;
-
-                // Display the alert message to the user interface
-                // You need to implement the code to display alerts in your UI framework
-                // This could involve showing a pop-up dialog or updating a label on the screen
-                // For example, using JavaFX's Alert class to show a pop-up dialog
-                // See the JavaFX documentation for details on creating alerts
-
-            } else {
-                // No upcoming appointments
-                String noAppointmentMessage = "You don't have any upcoming appointments within the next 15 minutes.";
-                // Display the message in the user interface
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public int getUserIdByUsername(String username) {
+        JDBC.openConnection();
         String getUserIdQuery = "SELECT User_ID FROM users WHERE User_Name = ?";
 
         try (Connection connection = JDBC.getConnection();
@@ -128,42 +86,104 @@ public class LoginController implements Initializable {
         return -1;
     }
 
+    public void checkUpcomingAppointments(String username) {
+        // Get the current time in UTC
+        ZonedDateTime currentTimeUtc = ZonedDateTime.now(ZoneOffset.UTC);
+        ZonedDateTime fifteenMinutesLaterUtc = currentTimeUtc.plusMinutes(15);
+
+        // Updated SQL query to capture appointments within the next 15 minutes
+        String upcomingAppointmentsQuery = "SELECT Appointment_ID, Start FROM appointments " +
+                "WHERE User_ID = ? AND Start > ? AND Start <= ?";
+
+        try (Connection connection = JDBC.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(upcomingAppointmentsQuery);
+            statement.setInt(1, getUserIdByUsername(username));
+            statement.setObject(2, currentTimeUtc.toLocalDateTime());
+            statement.setObject(3, fifteenMinutesLaterUtc.toLocalDateTime());
+
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                int appointmentId = resultSet.getInt("Appointment_ID");
+                String start = resultSet.getString("Start");
+
+                // Prepare the alert message
+                String alertMessage = "You have an upcoming appointment!\n" +
+                        "Appointment ID: " + appointmentId + "\n" +
+                        "Date/Time: " + start;
+
+                // Display an alert with the appointment information
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Upcoming Appointment");
+                alert.setHeaderText(null);
+                alert.setContentText(alertMessage);
+                alert.showAndWait();
+            } else {
+                String noAppointmentMessage = "You don't have any upcoming appointments within the next 15 minutes.";
+
+                // Display an alert with the message
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("No Upcoming Appointments");
+                alert.setHeaderText(null);
+                alert.setContentText(noAppointmentMessage);
+                alert.showAndWait();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
+     * @LAMBDA
+     * The LAMBDA expression here handles checked exceptions
      * This method handles the login button action event. When a user clicks on the button it checks the username and password, if valid it will bring them to the main screen
      * @param event handles user input from mouse click
      * @throws IOException error handling
      * */
     @FXML
-    public void loginButtonAction(ActionEvent event) throws IOException {
-        JDBC.openConnection();
-        // Store username and password into variables
-        String username = usernameField.getText();
-        String password = passwordField.getText();
-
-        // Create an instance of the LoginController (assuming you need it for some specific reason)
-        LoginController userAuthentication = new LoginController();
-        boolean isValid = userAuthentication.isValidCredentials(username, password);
-        logLoginActivity(username, isValid); // Log the login attempt
-
-        if (isValid) {
-            // Check for upcoming appointments within 15 minutes
+    public void loginButtonAction(ActionEvent event) {
+        // Using a lambda expression to handle the checked exceptions
+        handleCheckedExceptions(() -> {
             JDBC.openConnection();
-            checkUpcomingAppointments(username);
+            // Store username and password into variables
+            String username = usernameField.getText();
+            String password = passwordField.getText();
+            // Create an instance of the LoginController (assuming you need it for some specific reason)
+            LoginController userAuthentication = new LoginController();
+            boolean isValid = userAuthentication.isValidCredentials(username, password);
 
-            // Load the main screen
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
-            Parent parent = loader.load();
-            Scene scene = new Scene(parent);
-            MainScreenController controller = loader.getController();
-            // controller.sendProduct(productTableView.getSelectionModel().getSelectedIndex(),productTableView.getSelectionModel().getSelectedItem());
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.show();
-        } else {
-            errorLabel.setText("Invalid username or password");
+            logLoginActivity(username, isValid); // Log the login attempt
+
+            if (isValid) {
+                // Check for upcoming appointments within 15 minutes
+                JDBC.openConnection();
+                checkUpcomingAppointments(username);
+                // Load the main screen
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/c195final/MainScreen.fxml"));
+                Parent parent = loader.load();
+                Scene scene = new Scene(parent);
+                MainScreenController controller = loader.getController();
+                // controller.sendProduct(productTableView.getSelectionModel().getSelectedIndex(),productTableView.getSelectionModel().getSelectedItem());
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.show();
+            } else {
+                errorLabel.setText("Invalid username or password");
+            }
+        });
+    }
+
+    private interface CheckedRunnable {
+        void run() throws Exception;
+    }
+
+    private void handleCheckedExceptions(CheckedRunnable runnable) {
+        try {
+            runnable.run();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
+
 
 
     /**
@@ -197,9 +217,6 @@ public class LoginController implements Initializable {
         }
     }
 
-
-
-
     /**
      * Initializes class
      * @param resourceBundle specifies resource bundle to be used for localization
@@ -217,8 +234,6 @@ public class LoginController implements Initializable {
             ZoneId zone = ZoneId.systemDefault();
 
             location.setText(String.valueOf(zone));
-
-            System.out.println(rb.getString("hello") + " " + rb.getString("world"));
 
 
         } catch(MissingResourceException e) {

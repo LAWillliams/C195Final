@@ -86,40 +86,44 @@ public class CustomerController implements Initializable {
     }
 
     public void customerDeleteAction(ActionEvent event) throws SQLException {
-        String customerID = customerDeleteField.getText();
-        int deletedCustomerID = Integer.parseInt(customerID);
+        ObservableList<String> selectedRow = (ObservableList<String>) tableview.getSelectionModel().getSelectedItem();
 
-        // Check if there are associated appointments
-        boolean hasAppointments = checkForAppointments(deletedCustomerID);
+        if (selectedRow != null) {
+            String customerID = selectedRow.get(0); // Assuming Customer_ID is the first column
+            int deletedCustomerID = Integer.parseInt(customerID);
 
-        // Show a confirmation alert
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Delete Customer");
-        alert.setHeaderText("Delete Customer and Associated Appointments");
-        if (hasAppointments) {
-            alert.setContentText("Deleting this customer will also delete all associated appointments. Continue?");
-        } else {
-            alert.setContentText("Are you sure you want to delete this customer?");
-        }
+            // Check if there are associated appointments
+            boolean hasAppointments = checkForAppointments(deletedCustomerID);
 
-        // If the user confirms, proceed with deletion
-        ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-        if (result == ButtonType.OK) {
-            int rowsAffected = customerDelete(deletedCustomerID);
-            if (rowsAffected > 0) {
-                // Remove the deleted customer row from the data list
-                for (ObservableList<String> row : data) {
-                    String customerId = row.get(0);
-                    if (customerId.equals(customerID)) {
-                        data.remove(row);
-                        break; // Break once the row is removed
-                    }
-                }
-                // Refresh the TableView
-                tableview.refresh();
+            // Create and configure the confirmation alert
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Customer");
+            alert.setHeaderText("Delete Customer and Associated Appointments");
+
+            if (hasAppointments) {
+                alert.setContentText("Deleting this customer will also delete all associated appointments. Continue?");
+            } else {
+                alert.setContentText("Are you sure you want to delete this customer?");
             }
+
+            // If the user confirms, proceed with deletion
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+            if (result == ButtonType.OK) {
+                int rowsAffected = customerDelete(deletedCustomerID);
+                if (rowsAffected > 0) {
+                    // Remove the selected customer row from the data list
+                    data.remove(selectedRow);
+
+                    // Refresh the TableView
+                    tableview.refresh();
+                }
+            }
+        } else {
+            // Handle no row selected
         }
     }
+
+
 
     // Method to check if there are associated appointments
     public static boolean checkForAppointments(int customerID) throws SQLException {
@@ -164,40 +168,40 @@ public class CustomerController implements Initializable {
         return null;
     }
 
+    /**
+     * Handles the action when the "Update Customer" button is clicked.
+     *
+     * @param event The ActionEvent triggered by the button click.
+     * @throws IOException If an I/O exception occurs.
+     * @throws SQLException If a database access error occurs.
+     */
     public void customerUpdateAction(ActionEvent event) throws IOException, SQLException {
-        String customerID = customerUpdateField.getText().trim(); // Trim to remove leading/trailing spaces
+        ObservableList<String> selectedRow = (ObservableList<String>) tableview.getSelectionModel().getSelectedItem();
 
-        // Check if the customerID is not empty or null
-        if (!customerID.isEmpty()) {
+        if (selectedRow != null) {
+            String customerID = selectedRow.get(0); // Assuming Customer_ID is the first column
             int customerIdInt = Integer.parseInt(customerID);
 
-            // Retrieve the customer record using the provided customerID
             Customer customer = getCustomerByID(customerIdInt);
 
             if (customer != null) {
-                // Load the new FXML screen
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(getClass().getResource("/com/example/c195final/UpdateCustomer.fxml"));
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/c195final/UpdateCustomer.fxml"));
                 Parent parent = loader.load();
                 Scene scene = new Scene(parent);
 
-                // Pass the retrieved customer information to the controller of the new FXML screen
                 UpdateCustomerController controller = loader.getController();
-                controller.setCustomer(customer); // Assuming you have a setter in UpdateCustomerController
+                controller.setCustomer(customer);
 
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 stage.setScene(scene);
                 stage.show();
             } else {
-                // Handle the case when no customer record is found with the provided ID
-                // Display an error message or take appropriate action
+                // Handle no customer record found
             }
         } else {
-            // Handle the case when the customerID field is empty or null
-            // Display an error message or take appropriate action
+            // Handle no row selected
         }
     }
-
 
     public void customerAddAction(ActionEvent event) throws IOException {
 
@@ -257,10 +261,7 @@ public class CustomerController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         buildData();
-        tableview = new TableView();
-
     }
 }
 

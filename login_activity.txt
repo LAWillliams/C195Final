@@ -132,3 +132,57 @@ Aug 26, 2023 8:31:24 PM com.example.c195final.controller.LoginController logLogi
 INFO: Successful login attempt: User = test, Timestamp = 2023-08-26 20:31:24
 Aug 26, 2023 8:38:53 PM com.example.c195final.controller.LoginController logLoginActivity
 INFO: Successful login attempt: User = test, Timestamp = 2023-08-26 20:38:53
+Aug 26, 2023 9:07:55 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-26 21:07:55
+Aug 26, 2023 9:24:00 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-26 21:24:00
+Aug 27, 2023 4:58:34 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 16:58:34
+Aug 27, 2023 4:59:10 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 16:59:10
+Aug 27, 2023 5:02:14 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 17:02:14
+Aug 27, 2023 5:24:06 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 17:24:06
+Aug 27, 2023 5:25:02 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 17:25:02
+Aug 27, 2023 5:32:35 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 17:32:35
+Aug 27, 2023 6:07:07 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:07:07
+Aug 27, 2023 6:08:06 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:08:06
+Aug 27, 2023 6:27:35 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:27:35
+Aug 27, 2023 6:31:53 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:31:53
+Aug 27, 2023 6:33:22 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:33:22
+Aug 27, 2023 6:36:54 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:36:54
+Aug 27, 2023 6:37:46 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:37:46
+Aug 27, 2023 6:40:18 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:40:18
+Aug 27, 2023 6:42:42 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:42:42
+Aug 27, 2023 6:47:43 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:47:43
+Aug 27, 2023 6:50:35 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:50:35
+Aug 27, 2023 6:51:41 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:51:41
+Aug 27, 2023 6:55:11 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 18:55:11
+Aug 27, 2023 7:03:19 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 19:03:19
+Aug 27, 2023 7:05:31 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 19:05:31
+Aug 27, 2023 7:07:33 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 19:07:33
+Aug 27, 2023 7:09:09 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 19:09:09
+Aug 27, 2023 7:14:22 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 19:14:22
+Aug 27, 2023 7:17:11 PM com.example.c195final.controller.LoginController logLoginActivity
+INFO: Successful login attempt: User = test, Timestamp = 2023-08-27 19:17:11
