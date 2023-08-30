@@ -1,1 +1,0 @@
-moduleSearchIndex = [{"l":"com.example.c195final"}];updateSearchResults();

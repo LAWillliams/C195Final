@@ -18,10 +18,10 @@ java version "17.0.6" 2023-01-17 LTS
 Java(TM) SE Runtime Environment (build 17.0.6+9-LTS-190)
 Java HotSpot(TM) 64-Bit Server VM (build 17.0.6+9-LTS-190, mixed mode, sharing)
 javafx: openjfx-17.0.2
-mysql connector: mysql-connector-java-8.0.33
+mysql connector: mysql-connector-java-8.0.25
 
 ###Additional report
 For the custom report, I chose to display customers and their respective division. I chose to have SQL do the work for this. This SQL query retrieves data from two tables, customers and first_level_divisions, by performing an inner join based on the relationship between their Division_ID columns. The query returns the Customer_Name from the customers table and the Division from the first_level_divisions table for each record that matches the join condition.
 
 ###How to run the program
-As the program starts, a login screen is presented. The user will be required to have a valid username and password that matches information in a mysql database. This program requires java 11 and has not been tested with any other jvm. In order to add or update appointments and customers the user must select the row then click the appropiate delete/update. To add customers or appointments just click the add button and save after filling out the form as appropriate. To generate reports simply choose the report you want and click the button, except for the generate contact schedule reports, which require choosing the contact from the combo box. 
+As the program starts, a login screen is presented. The user will be required to have a valid username and password that matches information in a mysql database. This program requires java 11 and has not been tested with any other jvm. In order to add or update appointments and customers the user must select the row then click the appropiate delete/update. To add customers or appointments just click the add button and save after filling out the form as appropriate. To generate reports simply choose the report you want and click the button, except for the generate contact schedule reports, which require choosing the contact from the combo box. Additionally, all appointment times are shown in local time, along with updates and additions. Business hours are checked using eastern time and appointments are saved in UTC in the database. 
