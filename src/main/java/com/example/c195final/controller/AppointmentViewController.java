@@ -24,6 +24,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.util.Callback;
 
@@ -32,12 +33,6 @@ public class AppointmentViewController implements Initializable {
 
     public ObservableList<ObservableList> data;
     public TableView tableview;
-
-    @FXML
-    public TextField appointmentDeleteField;
-
-    @FXML
-    public TextField appointmentUpdateField;
 
     ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
     private static final ZoneId ET_ZONE = ZoneId.of("America/New_York"); // Eastern Time Zone
@@ -87,16 +82,36 @@ public class AppointmentViewController implements Initializable {
 
         if (selectedRow != null) {
             String appointmentId = selectedRow.get(0); // Assuming Appointment_ID is the first column
-            int deletedAppointmentID = Integer.parseInt(appointmentId);
+            String appointmentType = selectedRow.get(1); // Assuming Type is the second column, adjust as needed
 
-            int rowsAffected = appointmentDelete(deletedAppointmentID);
+            // Confirm the deletion with the user
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Delete Appointment");
+            alert.setHeaderText("Are you sure you want to delete this appointment?");
+            alert.setContentText("Appointment ID: " + appointmentId + "\nType: " + appointmentType);
 
-            if (rowsAffected > 0) {
-                // Remove the selected row from the data list
-                data.remove(selectedRow);
+            // Show the dialog and wait for user's response
+            Optional<ButtonType> result = alert.showAndWait();
 
-                // Refresh the TableView
-                tableview.refresh();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                int deletedAppointmentID = Integer.parseInt(appointmentId);
+                int rowsAffected = appointmentDelete(deletedAppointmentID);
+
+                if (rowsAffected > 0) {
+                    // Display a custom message about the canceled appointment
+                    Alert infoAlert = new Alert(Alert.AlertType.INFORMATION);
+                    infoAlert.setTitle("Appointment Deleted");
+                    infoAlert.setHeaderText(null);
+                    infoAlert.setContentText("Appointment with ID: " + deletedAppointmentID + " and Type: " + appointmentType + " has been deleted.");
+
+                    infoAlert.showAndWait();
+
+                    // Remove the selected row from the data list
+                    data.remove(selectedRow);
+
+                    // Refresh the TableView
+                    tableview.refresh();
+                }
             }
         }
     }
